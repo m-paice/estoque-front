@@ -46,10 +46,15 @@ export function DeleteModal({ open, setOpen }: Props) {
           <Button
             size="small"
             variant="outiline"
-            title="Cancelar"
             onClick={() => setOpen(false)}
-          />
-          <Button size="small" title="Remover" onClick={() => setOpen(false)} />
+          >
+            {" "}
+            Cancelar{" "}
+          </Button>
+          <Button size="small" onClick={() => setOpen(false)}>
+            {" "}
+            Remover{" "}
+          </Button>
         </div>
       </div>
     </Modal>

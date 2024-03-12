@@ -1,12 +1,9 @@
-import { Menu, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 
 interface Props {
   text: string;
   color: string;
 }
-
-const actions = ["Finalizar", "Cancelar", "Restaurar", "Editar", "Deletar"];
 
 export function Item({ text, color }: Props) {
   const [isHovered, setIsHovered] = useState("");
@@ -18,75 +15,28 @@ export function Item({ text, color }: Props) {
         position: "relative",
       }}
     >
-      <Menu as="div">
-        <div>
-          <Menu.Button
-            style={{
-              backgroundColor: "transparent",
-              border: "none",
-              cursor: "pointer",
-              width: "100%",
-            }}
-          >
-            <div className="item" style={styles.item}>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  width: "100%",
-                }}
-              >
-                <b style={{ fontSize: 18 }}>8:00 AM</b>
-                <span
-                  style={{
-                    backgroundColor: color,
-                    ...styles.status,
-                  }}
-                >
-                  {text}
-                </span>
-              </div>
-              <p style={{ fontSize: 16 }}>Matheus Paice</p>
-              <p style={{ fontSize: 16 }}>Corte degrade, barba</p>
-            </div>
-          </Menu.Button>
-        </div>
-        <Transition
-          as={Fragment}
-          enter="transition ease-out duration-100"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-75"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
+      <div
+        className="item"
+        onMouseEnter={() => setIsHovered(text)}
+        onMouseLeave={() => setIsHovered("")}
+        style={{
+          ...styles.item,
+          transition: "0.3s",
+          color: isHovered === text ? "#7E9EF0" : "black",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            width: "100%",
+          }}
         >
-          <Menu.Items>
-            <div style={styles.containerOptions}>
-              {actions.map((action) => (
-                <Menu.Item key={action}>
-                  <button
-                    onClick={() => {
-                      setIsHovered("");
-                    }}
-                    onMouseEnter={() => setIsHovered(action)}
-                    onMouseLeave={() => setIsHovered("")}
-                    style={{
-                      ...styles.button,
-                      color: isHovered === action ? "#e34954" : "#000",
-                      backgroundColor:
-                        isHovered === action
-                          ? "rgba(250, 137, 107, 0.3)"
-                          : "transparent",
-                    }}
-                  >
-                    {action}
-                  </button>
-                </Menu.Item>
-              ))}
-            </div>
-          </Menu.Items>
-        </Transition>
-      </Menu>
+          <b style={{ fontSize: 18 }}>8:00 AM</b>
+        </div>
+        <p style={{ fontSize: 16 }}>Matheus Paice</p>
+        <p style={{ fontSize: 16 }}>Notebook, Teclado, Mouse</p>
+      </div>
     </div>
   );
 }
@@ -129,7 +79,7 @@ const styles = {
     color: "#13deb9",
   },
   canceled: {
-    backgroundColor: "rgba(250, 137, 107, 0.3)",
+    backgroundColor: "#7E9EF0",
     color: "#fa896b",
   },
   restored: {
@@ -138,7 +88,7 @@ const styles = {
   },
   default: {
     backgroundColor: "rgba(237, 59, 71, 0.3)",
-    color: "#e34954",
+    color: "#7E9EF0",
   },
 
   button: {

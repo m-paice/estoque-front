@@ -95,9 +95,9 @@ export function Sidebar() {
                 backgroundColor:
                   isHovered === route.path &&
                   !location.pathname.includes(route.path)
-                    ? "rgba(250, 137, 107, 0.3)"
+                    ? "#BFCCED"
                     : location.pathname.includes(route.path)
-                    ? "#e34954"
+                    ? "#7E9EF0"
                     : "white",
                 color: location.pathname.includes(route.path)
                   ? "white"
@@ -111,7 +111,7 @@ export function Sidebar() {
                   color={
                     isHovered === route.path &&
                     !location.pathname.includes(route.path)
-                      ? "#e34954"
+                      ? "#7E9EF0"
                       : ""
                   }
                 />

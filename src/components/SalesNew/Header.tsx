@@ -7,15 +7,15 @@ export function Header({ currentStep, changeStep }: Props) {
   return (
     <div
       style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr 1fr",
+        display: "flex",
+        justifyContent: "space-between",
         margin: "20px 0",
       }}
     >
       <div
         style={{
           cursor: "pointer",
-          color: currentStep === 1 ? "#e34954" : "black",
+          color: currentStep === 1 ? "#7E9EF0" : "black",
         }}
         onClick={() => changeStep(1)}
       >
@@ -25,7 +25,7 @@ export function Header({ currentStep, changeStep }: Props) {
       <div
         style={{
           cursor: "pointer",
-          color: currentStep === 2 ? "#e34954" : "black",
+          color: currentStep === 2 ? "#7E9EF0" : "black",
         }}
         onClick={() => changeStep(2)}
       >
@@ -35,7 +35,7 @@ export function Header({ currentStep, changeStep }: Props) {
       <div
         style={{
           cursor: "pointer",
-          color: currentStep === 3 ? "#e34954" : "black",
+          color: currentStep === 3 ? "#7E9EF0" : "black",
         }}
         onClick={() => changeStep(3)}
       >
@@ -50,8 +50,8 @@ const styles = {
   step: {
     fontWeight: "bold",
     fontSize: 18,
-    color: "#e34954",
-    backgroundColor: "#fde8e9",
+    color: "#7E9EF0",
+    backgroundColor: "#BFCCED",
     padding: "5px 10px",
     borderRadius: 50,
     marginRight: 10,

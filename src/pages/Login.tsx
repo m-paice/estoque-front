@@ -88,7 +88,7 @@ export function Login() {
               <input type="checkbox" id="remember" name="remember" />
               Lembrar-me
             </label>
-            <Button title="Entrar" onClick={() => navigate("sales")} />
+            <Button onClick={() => navigate("sales")}> Entrar </Button>
           </form>
         </div>
       </section>

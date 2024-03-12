@@ -13,7 +13,7 @@ export function Items() {
   return (
     <div>
       <div>
-        <span style={styles.title}>8 Items</span>
+        <span style={styles.title}>8 vendas</span>
       </div>
       <div style={styles.container}>
         {Array.from({ length: 8 }).map((_, i) => {

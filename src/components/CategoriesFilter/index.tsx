@@ -23,8 +23,8 @@ export function CategoriesFilter() {
             padding: 3,
             transition: "color 0.3s, background-color 0.3s ease",
             border: selected === item ? "1px solid" : "none",
-            color: isHovered === item || selected === item ? "#e34954" : "",
-            borderColor: selected === item ? "rgba(250, 137, 107, 0.3)" : "",
+            color: isHovered === item || selected === item ? "#7E9EF0" : "",
+            borderColor: selected === item ? "#7E9EF0" : "",
             backgroundColor:
               isHovered === item ? "rgba(250, 137, 107, 0.1)" : "",
           }}

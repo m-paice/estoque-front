@@ -78,7 +78,7 @@ export function ProductsList({ products }: Props) {
                 transition: "color 0.3s, background-color 0.3s ease",
                 color:
                   isHovered === product.id || selected === product.id
-                    ? "#e34954"
+                    ? "#7E9EF0"
                     : "",
                 backgroundColor:
                   isHovered === product.id ? "rgba(250, 137, 107, 0.1)" : "",

@@ -90,13 +90,15 @@ export function Calendar({
         <div style={styles.buttons}>
           <Button
             size="small"
-            title="anterior"
             onClick={() =>
               setCurrentDate(
                 dayjs(currentDate).subtract(1, "month").startOf("month")
               )
             }
-          />
+          >
+            {" "}
+            anterior{" "}
+          </Button>
           <span
             style={{
               cursor: "pointer",
@@ -110,13 +112,15 @@ export function Calendar({
           </span>
           <Button
             size="small"
-            title="próximo"
             onClick={() =>
               setCurrentDate(
                 dayjs(currentDate).add(1, "month").startOf("month")
               )
             }
-          />
+          >
+            {" "}
+            próximo{" "}
+          </Button>
         </div>
       </div>
       <div style={styles.dayOfWeek}>
@@ -299,7 +303,7 @@ const styles: { [key: string]: CSSProperties } = {
     borderColor: "#13deb9",
   },
   canceled: {
-    backgroundColor: "rgba(250, 137, 107, 0.3)",
+    backgroundColor: "#7E9EF0",
     color: "#fa896b",
     borderColor: "#fa896b",
   },

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { colors } from "../../theme";
 
 interface Props {
-  title: string;
+  children?: React.ReactNode;
   variant?: "outiline" | "filled";
   onClick?: () => void;
   size?: "small" | "medium" | "large";
@@ -15,7 +15,7 @@ const sizes = {
 };
 
 export function Button({
-  title,
+  children,
   variant = "filled",
   onClick,
   size = "medium",
@@ -29,13 +29,13 @@ export function Button({
         padding: "10px",
         transition: "0.3s",
         backgroundColor: isHovered
-          ? "rgba(250, 137, 107, 0.3)"
+          ? "#BFCCED"
           : variant === "filled"
           ? colors.primary
           : "transparent",
         border: variant === "filled" ? "none" : `1px solid ${colors.primary}`,
         color: isHovered
-          ? "#e34954"
+          ? colors.primary
           : variant === "filled"
           ? colors.white
           : colors.primary,
@@ -50,7 +50,7 @@ export function Button({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      {title}
+      {children}
     </button>
   );
 }

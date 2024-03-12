@@ -28,7 +28,7 @@ export function Input({ label, placeholder, name, size = "medium" }: Props) {
           outline: "none",
           border: "1px solid",
           borderRadius: 5,
-          borderColor: isActived || isHovered === name ? "#e34954" : "#ccc",
+          borderColor: isActived || isHovered === name ? "#7E9EF0" : "#ccc",
           transition: "0.3s",
           height: sizes[size],
         }}

@@ -12,7 +12,7 @@ interface Props {
 const sizes = {
   small: "450px",
   medium: "700px",
-  large: "900px",
+  large: "1100px",
 };
 
 export function Modal({

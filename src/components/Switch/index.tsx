@@ -20,7 +20,7 @@ export function Switch() {
       <span
         style={{
           display: "block",
-          backgroundColor: "#e34954",
+          backgroundColor: "#7E9EF0",
           borderRadius: "50%",
           width: 20,
           height: 20,

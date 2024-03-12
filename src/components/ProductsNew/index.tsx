@@ -10,7 +10,7 @@ export function ProductsNew() {
 
   return (
     <div>
-      <Button title="Novo Produto" onClick={() => setOpen(!open)} />
+      <Button onClick={() => setOpen(!open)}> Novo Produto </Button>
 
       <Modal
         title="Novo produto"
@@ -96,7 +96,7 @@ export function ProductsNew() {
                 />
               </div>
 
-              <Button title="Salvar" />
+              <Button> Salvar </Button>
             </form>
           </div>
         </div>

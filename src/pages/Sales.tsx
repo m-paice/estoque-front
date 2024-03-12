@@ -16,14 +16,17 @@ export function Sales() {
   );
   const [selectedDate, setSelectedDate] = useState(dayjs(new Date()));
 
-  const { isOpen, toggle } = useToggle();
+  const { toggle, onChangeToggle } = useToggle();
 
   return (
     <div style={styles.container}>
       <section style={styles.leftSection}>
         <SelectedDay selectedDate={selectedDate} />
         <Items />
-        <Button title="Registrar venda" size="large" onClick={toggle} />
+        <Button size="large" onClick={onChangeToggle}>
+          {" "}
+          {"Registrar venda".toUpperCase()}{" "}
+        </Button>
       </section>
       <section style={styles.rightSection}>
         <Calendar
@@ -34,8 +37,12 @@ export function Sales() {
         />
       </section>
 
-      <Modal title="Registrando de venda" isOpen={isOpen} closeModal={toggle}>
-        <SalesNew onClose={toggle} />
+      <Modal
+        title="Registrando de venda"
+        isOpen={toggle}
+        closeModal={onChangeToggle}
+      >
+        <SalesNew onClose={onChangeToggle} />
       </Modal>
     </div>
   );

@@ -76,7 +76,7 @@ export function CategoriesList({ categories }: Props) {
                 transition: "color 0.3s, background-color 0.3s ease",
                 color:
                   isHovered === category.id || selected === category.id
-                    ? "#e34954"
+                    ? "#7E9EF0"
                     : "",
                 backgroundColor:
                   isHovered === category.id ? "rgba(250, 137, 107, 0.1)" : "",

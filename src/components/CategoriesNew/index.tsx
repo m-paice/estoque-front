@@ -8,7 +8,7 @@ export function CategoriesNew() {
   const [open, setOpen] = useState(false);
   return (
     <div>
-      <Button title="Nova categoria" onClick={() => setOpen(!open)} />
+      <Button onClick={() => setOpen(!open)}> Nova categoria </Button>
 
       <Modal
         title="Nova categoria"
@@ -54,7 +54,7 @@ export function CategoriesNew() {
                 name="name"
               />
 
-              <Button title="Salvar" />
+              <Button> Salvar </Button>
             </form>
           </div>
         </div>

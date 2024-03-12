@@ -1,6 +1,6 @@
-import { CreditCardIcon, CurrencyDollarIcon } from "@heroicons/react/20/solid";
-import { Input } from "../Input";
-import { useState } from "react";
+import { CurrencyDollarIcon } from "@heroicons/react/20/solid";
+
+import { Button } from "../Button";
 
 interface Props {
   products: {
@@ -11,100 +11,241 @@ interface Props {
   }[];
 }
 
-const payments = [
-  { name: "Dinheiro", icon: CurrencyDollarIcon },
-  { name: "PIX", icon: CurrencyDollarIcon },
-  { name: "Cartão de crédito", icon: CreditCardIcon },
-  { name: "Cartão de débito", icon: CreditCardIcon },
-  { name: "A prazo", icon: CurrencyDollarIcon },
-];
+const Paragraph = ({ title, prefix }: { title: string; prefix?: string }) => (
+  <p
+    style={{
+      margin: 0,
+      padding: 0,
+      // color: "#5a6a85",
+    }}
+  >
+    {prefix && <span style={{ fontWeight: "bold" }}>{prefix} </span>}
+    {title}
+  </p>
+);
 
 export function Payment({ products }: Props) {
-  const [paymentSelected, setPaymentSelected] = useState("");
-
   return (
     <div
       style={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr",
+        height: 420,
+        overflow: "auto",
+        paddingRight: 10,
+        display: "flex",
+        flexDirection: "column",
+        gap: 20,
       }}
     >
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: 15,
+        }}
+      >
+        <div
+          style={{
+            border: "1px solid #e5e7eb",
+            borderRadius: 10,
+            padding: 15,
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 10,
+            }}
+          >
+            <h4>{"Dados do cliente".toUpperCase()}</h4>
+            <span
+              style={{
+                color: "#5a6a85",
+                cursor: "pointer",
+              }}
+            >
+              editar
+            </span>
+          </div>
+          <div>
+            <Paragraph title="Matheus Paice" />
+            <Paragraph title="460.551.121-98" prefix="CPF:" />
+            <Paragraph title="(11) 99845-5545" />
+          </div>
+        </div>
+        <div
+          style={{
+            border: "1px solid #e5e7eb",
+            borderRadius: 10,
+            padding: 15,
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginBottom: 10,
+            }}
+          >
+            <h4>{"Endereço".toUpperCase()}</h4>
+            <span
+              style={{
+                color: "#5a6a85",
+                cursor: "pointer",
+              }}
+            >
+              editar
+            </span>
+          </div>
+          <div>
+            <Paragraph title="39400-000" />
+            <Paragraph title="Rua das Flores, 123" />
+            <Paragraph title="Jardim das Flores" />
+            <div
+              style={{
+                display: "flex",
+                gap: 10,
+              }}
+            >
+              <Paragraph title="São Paulo" />
+              <Paragraph title="SP" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        style={{
+          border: "1px solid #e5e7eb",
+          borderRadius: 10,
+          padding: 15,
+        }}
+      >
+        <h4>{"Forma de pagamento".toUpperCase()}</h4>
+        <input type="radio" name="payment" id="credit" />
+        <label htmlFor="credit">Cartão de crédito</label>
+        <br />
+        <input type="radio" name="payment" id="debit" />
+        <label htmlFor="debit">Cartão de débito</label>
+        <br />
+        <input type="radio" name="payment" id="money" />
+        <label htmlFor="money">Dinheiro</label>
+        <br />
+        <input type="radio" name="payment" id="pix" />
+        <label htmlFor="pix">Pix</label>
+      </div>
+
       <div>
-        <h4>Produtos</h4>
-        <ul>
+        <h4>{"Produtos".toUpperCase()}</h4>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "80px 1fr 120px 120px 120px",
+          }}
+        >
+          <p>ID</p>
+          <p>Nome</p>
+          <p style={{ textAlign: "right" }}>Quantidade</p>
+          <p style={{ textAlign: "right" }}>Preço Unidade</p>
+          <p style={{ textAlign: "right" }}>Total</p>
+        </div>
+        <div>
           {products.map((product) => (
-            <li
+            <div
               key={product.id}
               style={{
                 display: "grid",
-                gridTemplateColumns: "30px auto 100px 80px ",
-                alignItems: "center",
-                marginBottom: 2,
-                fontSize: 14,
+                gridTemplateColumns: "80px 1fr 120px 120px 120px",
               }}
             >
-              <p>{product.amount}x</p>
+              <p>#{product.id}</p>
               <p>{product.name}</p>
-              <p>
-                {product.price.toLocaleString("pt-br", {
+              <p style={{ textAlign: "right" }}>{product.amount}</p>
+              <p style={{ textAlign: "right" }}>
+                {product.price.toLocaleString("pt-BR", {
                   style: "currency",
                   currency: "BRL",
                 })}
               </p>
-            </li>
+              <p style={{ textAlign: "right" }}>
+                {(product.price * product.amount).toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })}
+              </p>
+            </div>
           ))}
-        </ul>
-
-        <h4>Dados do cliente</h4>
-        <p style={{ fontSize: 14 }}>João da Silva - (11) 99999-9999</p>
-        <p style={{ fontSize: 14 }}>CPF: 123.456.789-00</p>
-
-        <h4>Endereço</h4>
-        <p style={{ fontSize: 14 }}>Rua das flores, 123, Casa</p>
-        <p style={{ fontSize: 14 }}>Jardim das flores - SP</p>
+        </div>
       </div>
 
-      <div>
-        <h4>Forma de pagamento</h4>
-        <ul>
-          {payments.map((payment) => (
-            <li
-              key={payment.name}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          gap: 10,
+        }}
+      >
+        <p
+          style={{
+            fontSize: 16,
+          }}
+        >
+          Taxa de entrega
+        </p>
+        <p style={{ textAlign: "right", fontSize: 16 }}>
+          {(20).toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          })}
+        </p>
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          gap: 10,
+        }}
+      >
+        <p
+          style={{
+            fontSize: 20,
+          }}
+        >
+          Total
+        </p>
+        <p style={{ textAlign: "right", fontSize: 20 }}>
+          {products
+            .reduce((acc, product) => acc + product.price * product.amount, 0)
+            .toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })}
+        </p>
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+        }}
+      >
+        <div>
+          <Button>
+            <div
               style={{
-                display: "grid",
-                gridTemplateColumns: "25px auto",
+                display: "flex",
+                gap: 10,
                 alignItems: "center",
-                marginBottom: 5,
-                cursor: "pointer",
-                color: paymentSelected === payment.name ? "#e34954" : "black",
               }}
-              onClick={() => setPaymentSelected(payment.name)}
             >
-              <payment.icon width={20} />
-              <p>{payment.name}</p>
-            </li>
-          ))}
-        </ul>
-
-        <div
-          style={{
-            margin: "20px 0",
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 16,
-          }}
-        >
-          <Input label="Desconto" placeholder="R$ 0,00" size="small" />
-          <Input label="Acréscimo" placeholder="R$ 0,00" size="small" />
+              <CurrencyDollarIcon width={20} />
+              Finalizar
+            </div>
+          </Button>
         </div>
-
-        <h2
-          style={{
-            textAlign: "right",
-          }}
-        >
-          TOTAL R$ 200,00
-        </h2>
       </div>
     </div>
   );
