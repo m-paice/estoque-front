@@ -1,72 +1,28 @@
+import { useLayoutEffect } from "react";
 import { CategoriesList } from "../components/CategoriesList";
 import { CategoriesDetails } from "../components/CategoriesDetails";
 import { CategoriesNew } from "../components/CategoriesNew";
 import { CategoriesFilter } from "../components/CategoriesFilter";
+import { useRequestFindMany } from "../hooks/useRequestFindMany";
 
-const categories = [
-  {
-    id: "1",
-    name: "Tecnologia",
-  },
-  {
-    id: "2",
-    name: "Moda",
-  },
-  {
-    id: "3",
-    name: "Esporte",
-  },
-  {
-    id: "4",
-    name: "Livros",
-  },
-  {
-    id: "5",
-    name: "Casa",
-  },
-  {
-    id: "6",
-    name: "Decoração",
-  },
-  {
-    id: "7",
-    name: "Jogos",
-  },
-  {
-    id: "8",
-    name: "Brinquedos",
-  },
-  {
-    id: "9",
-    name: "Móveis",
-  },
-  {
-    id: "10",
-    name: "Beleza",
-  },
-  {
-    id: "11",
-    name: "Papelaria",
-  },
-  {
-    id: "12",
-    name: "Pet",
-  },
-  {
-    id: "13",
-    name: "Alimentos",
-  },
-  {
-    id: "14",
-    name: "Bebidas",
-  },
-  {
-    id: "15",
-    name: "Outros",
-  },
-];
+export interface Categories {
+  id: string;
+  name: string;
+}
 
 export function Categories() {
+  const { execute, response } = useRequestFindMany<Categories>({
+    path: "/categories",
+  });
+
+  useLayoutEffect(() => {
+    execute();
+  }, [
+    window.location.pathname.includes("/new"),
+    window.location.pathname.includes("/edit"),
+    window.location.pathname.includes("/delete"),
+  ]);
+
   return (
     <div>
       <div style={styles.container}>
@@ -84,7 +40,7 @@ export function Categories() {
           <CategoriesNew />
           <CategoriesFilter />
         </div>
-        <CategoriesList categories={categories} />
+        <CategoriesList categories={response || []} />
         <CategoriesDetails />
       </div>
     </div>

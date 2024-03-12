@@ -14,7 +14,7 @@ export function useRequestCreate<T>({ path }: Props) {
   const execute = (payload: T, params = {}) => {
     setLoading(true);
 
-    api()
+    api
       .post(path, payload, {
         params,
       })

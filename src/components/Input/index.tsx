@@ -5,9 +5,19 @@ interface Props {
   placeholder: string;
   name: string;
   size?: "small" | "medium" | "large";
+
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export function Input({ label, placeholder, name, size = "medium" }: Props) {
+export function Input({
+  label,
+  placeholder,
+  name,
+  size = "medium",
+  value,
+  onChange,
+}: Props) {
   const [isHovered, setIsHovered] = useState("");
   const [isActived, setIsActived] = useState(false);
 
@@ -39,6 +49,8 @@ export function Input({ label, placeholder, name, size = "medium" }: Props) {
         onMouseLeave={() => setIsHovered("")}
         onFocus={() => setIsActived(true)}
         onBlur={() => setIsActived(false)}
+        value={value}
+        onChange={onChange}
       />
     </div>
   );

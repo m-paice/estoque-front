@@ -1,19 +1,81 @@
 import { Button } from "../Button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal } from "../Modal";
 import { Input } from "../Input";
 import { Avatar } from "../Avatar";
+import { useRequestCreate } from "../../hooks/useRequestCreate";
+import { useNavigate, useParams } from "react-router-dom";
+import { useRequestFindOne } from "../../hooks/useRequestFindOne";
+import { useRequestUpdate } from "../../hooks/useRequestUpdate";
 
 export function CategoriesNew() {
-  const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+
+  const [fields, setFields] = useState({
+    name: "",
+  });
+
+  const { execute, response } = useRequestCreate({
+    path: "/categories",
+  });
+  const { execute: execUpdate, response: responseUpdate } = useRequestUpdate({
+    path: "/categories",
+    id: id!,
+  });
+  const { execute: execFindOne, response: responseFindOnde } =
+    useRequestFindOne<{ name: string }>({
+      id: id!,
+      path: "/categories",
+    });
+
+  useEffect(() => {
+    if (id) execFindOne();
+    else {
+      setFields({
+        name: "",
+      });
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (responseFindOnde) {
+      setFields({
+        name: responseFindOnde.name,
+      });
+    }
+  }, [responseFindOnde]);
+
+  useEffect(() => {
+    if (response || responseUpdate) navigate("/categories");
+  }, [response, responseUpdate]);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (id) execUpdate(fields);
+    else execute(fields);
+  };
+
+  const handleClickNew = () => {
+    navigate("/categories/new");
+  };
+
+  const isEditing = id;
+
   return (
     <div>
-      <Button onClick={() => setOpen(!open)}> Nova categoria </Button>
+      <Button onClick={handleClickNew}>Nova categoria</Button>
 
       <Modal
-        title="Nova categoria"
-        isOpen={open}
-        closeModal={() => setOpen(false)}
+        title={isEditing ? "Editar categoria" : "Nova categoria"}
+        isOpen={
+          window.location.pathname.includes("/new") ||
+          window.location.pathname.includes("/edit")
+        }
+        closeModal={() => {
+          if (isEditing) navigate(`/categories/${id}`);
+          else navigate("/categories");
+        }}
         size="medium"
       >
         <div
@@ -30,7 +92,7 @@ export function CategoriesNew() {
             }}
           >
             <form
-              onSubmit={() => {}}
+              onSubmit={handleSubmit}
               style={{
                 display: "flex",
                 flexDirection: "column",
@@ -52,6 +114,8 @@ export function CategoriesNew() {
                 label="Nome"
                 placeholder="Digite o nome da categoria"
                 name="name"
+                value={fields.name}
+                onChange={(e) => setFields({ ...fields, name: e.target.value })}
               />
 
               <Button> Salvar </Button>

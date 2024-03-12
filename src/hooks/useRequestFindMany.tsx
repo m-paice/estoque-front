@@ -15,7 +15,7 @@ export function useRequestFindMany<T>({ path, defaultQuery = {} }: Props) {
   const execute = (params = {}) => {
     setLoading(true);
 
-    api()
+    api
       .get(path, {
         params: {
           ...defaultQuery,

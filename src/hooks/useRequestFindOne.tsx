@@ -16,7 +16,7 @@ export function useRequestFindOne<T>({ path, id, defaultQuery = {} }: Props) {
   const execute = (params = {}) => {
     setLoading(true);
 
-    api()
+    api
       .get(`${path}/${id}`, {
         params: {
           ...defaultQuery,

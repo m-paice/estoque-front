@@ -1,5 +1,6 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   categories: {
@@ -9,6 +10,8 @@ interface Props {
 }
 
 export function CategoriesList({ categories }: Props) {
+  const navigate = useNavigate();
+
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState("");
   const [isHovered, setIsHovered] = useState("");
@@ -80,7 +83,10 @@ export function CategoriesList({ categories }: Props) {
                     : "",
                 backgroundColor: isHovered === category.id ? "#E8ECF4" : "",
               }}
-              onClick={() => setSelected(category.id)}
+              onClick={() => {
+                setSelected(category.id);
+                navigate(`/categories/${category.id}`);
+              }}
               onMouseEnter={() => setIsHovered(category.id)}
               onMouseLeave={() => setIsHovered("")}
             >

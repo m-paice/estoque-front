@@ -26,6 +26,22 @@ const router = createBrowserRouter([
         path: "/categories",
         element: <Categories />,
       },
+      {
+        path: "/categories/new",
+        element: <Categories />,
+      },
+      {
+        path: "/categories/:id",
+        element: <Categories />,
+      },
+      {
+        path: "/categories/:id/delete",
+        element: <Categories />,
+      },
+      {
+        path: "/categories/:id/edit",
+        element: <Categories />,
+      },
     ],
   },
 ]);

@@ -1,17 +1,31 @@
+import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "../Button";
 import { Modal } from "../Modal";
+import { useRequestDestroy } from "../../hooks/useRequestDestroy";
 
-interface Props {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-}
+export function DeleteModal() {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
 
-export function DeleteModal({ open, setOpen }: Props) {
+  const { execute } = useRequestDestroy({
+    path: "/categories",
+    callbackSuccess: () => {
+      navigate("/categories");
+    },
+  });
+
+  const handleSubmit = () => {
+    execute(id!);
+  };
+  const handleCancel = () => {
+    navigate(`/categories/${id}`);
+  };
+
   return (
     <Modal
       title="Remover categoria"
-      isOpen={open}
-      closeModal={() => setOpen(false)}
+      isOpen={window.location.pathname.includes("/delete")}
+      closeModal={handleCancel}
       size="small"
     >
       <div
@@ -43,17 +57,11 @@ export function DeleteModal({ open, setOpen }: Props) {
             gap: 50,
           }}
         >
-          <Button
-            size="small"
-            variant="outiline"
-            onClick={() => setOpen(false)}
-          >
-            {" "}
-            Cancelar{" "}
+          <Button size="small" variant="outiline" onClick={handleCancel}>
+            Cancelar
           </Button>
-          <Button size="small" onClick={() => setOpen(false)}>
-            {" "}
-            Remover{" "}
+          <Button size="small" onClick={handleSubmit}>
+            Remover
           </Button>
         </div>
       </div>

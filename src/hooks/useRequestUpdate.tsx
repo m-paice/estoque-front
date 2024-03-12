@@ -4,24 +4,23 @@ import { api } from "../services/api";
 
 interface Props {
   path: string;
-  //id: string;
-  callbackSuccess?: () => void;
+  id: string;
 }
 
-export function useRequestDestroy({ path, callbackSuccess }: Props) {
-  const [response, setResponse] = useState<boolean | null>(null);
+export function useRequestUpdate<T>({ path, id }: Props) {
+  const [response, setResponse] = useState<T | null>(null);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const execute = (id: string) => {
+  const execute = (payload: T, params = {}) => {
     setLoading(true);
-    setError(false);
 
     api
-      .delete(`${path}/${id}`)
-      .then(() => {
-        if (callbackSuccess) callbackSuccess();
-        setResponse(true);
+      .put(`${path}/${id}`, payload, {
+        params,
+      })
+      .then(({ data }) => {
+        setResponse(data);
 
         setError(false);
         setLoading(false);

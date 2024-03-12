@@ -1,29 +1,45 @@
-import { useState } from "react";
 import { PencilIcon, TrashIcon } from "@heroicons/react/20/solid";
 
 import { DeleteModal } from "./DeleteModal";
+import { useNavigate, useParams } from "react-router-dom";
 
 export function Header() {
-  const [open, setOpen] = useState(false);
-  return (
-    <div style={styles.container}>
-      <h4>Detalhes</h4>
-      <div
-        style={{
-          display: "flex",
-          gap: 20,
-        }}
-      >
-        <PencilIcon width={20} color="gray" style={{ cursor: "pointer" }} />
-        <TrashIcon
-          width={20}
-          color="gray"
-          style={{ cursor: "pointer" }}
-          onClick={() => setOpen(!open)}
-        />
-      </div>
+  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
 
-      <DeleteModal open={open} setOpen={setOpen} />
+  const handleClickDelete = () => {
+    navigate(`/categories/${id}/delete`);
+  };
+
+  const handleClickUpdate = () => {
+    navigate(`/categories/${id}/edit`);
+  };
+
+  return (
+    <div>
+      <div style={styles.container}>
+        <h4>Detalhes</h4>
+        <div
+          style={{
+            display: "flex",
+            gap: 20,
+          }}
+        >
+          <PencilIcon
+            width={20}
+            color="gray"
+            style={{ cursor: "pointer" }}
+            onClick={handleClickUpdate}
+          />
+          <TrashIcon
+            width={20}
+            color="gray"
+            style={{ cursor: "pointer" }}
+            onClick={handleClickDelete}
+          />
+        </div>
+      </div>
+      <DeleteModal />
     </div>
   );
 }
