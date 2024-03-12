@@ -80,8 +80,7 @@ export function ProductsList({ products }: Props) {
                   isHovered === product.id || selected === product.id
                     ? "#7E9EF0"
                     : "",
-                backgroundColor:
-                  isHovered === product.id ? "rgba(250, 137, 107, 0.1)" : "",
+                backgroundColor: isHovered === product.id ? "#E8ECF4" : "",
               }}
               onClick={() => setSelected(product.id)}
               onMouseEnter={() => setIsHovered(product.id)}

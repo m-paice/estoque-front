@@ -25,8 +25,7 @@ export function ProductsFilter() {
             border: selected === item ? "1px solid" : "none",
             color: isHovered === item || selected === item ? "#7E9EF0" : "",
             borderColor: selected === item ? "#7E9EF0" : "",
-            backgroundColor:
-              isHovered === item ? "rgba(250, 137, 107, 0.1)" : "",
+            backgroundColor: isHovered === item ? "#E8ECF4" : "",
           }}
           onClick={() => setSelected(item)}
           onMouseEnter={() => setIsHovered(item)}

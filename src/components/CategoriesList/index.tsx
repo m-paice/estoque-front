@@ -78,8 +78,7 @@ export function CategoriesList({ categories }: Props) {
                   isHovered === category.id || selected === category.id
                     ? "#7E9EF0"
                     : "",
-                backgroundColor:
-                  isHovered === category.id ? "rgba(250, 137, 107, 0.1)" : "",
+                backgroundColor: isHovered === category.id ? "#E8ECF4" : "",
               }}
               onClick={() => setSelected(category.id)}
               onMouseEnter={() => setIsHovered(category.id)}
