@@ -8,7 +8,10 @@ import { useLayoutEffect } from "react";
 export interface Products {
   id: string;
   name: string;
-  category: string;
+  category: {
+    id: string;
+    name: string;
+  } | null;
   price: number;
   amount: number;
 }

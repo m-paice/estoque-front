@@ -52,7 +52,7 @@ export function ProductsDetails() {
           <Avatar />
           <div>
             <h4>{responseFindOne.name}</h4>
-            <p>{responseFindOne?.category}</p>
+            <p>{responseFindOne?.category?.name}</p>
           </div>
         </div>
 

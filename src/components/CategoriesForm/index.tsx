@@ -8,13 +8,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useRequestFindOne } from "../../hooks/useRequestFindOne";
 import { useRequestUpdate } from "../../hooks/useRequestUpdate";
 
+const initialState = {
+  name: "",
+};
+
 export function CategoriesForm() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 
-  const [fields, setFields] = useState({
-    name: "",
-  });
+  const [fields, setFields] = useState(initialState);
 
   const { execute, response } = useRequestCreate({
     path: "/categories",
@@ -32,9 +34,7 @@ export function CategoriesForm() {
   useEffect(() => {
     if (id) execFindOne();
     else {
-      setFields({
-        name: "",
-      });
+      setFields(initialState);
     }
   }, [id]);
 
@@ -47,7 +47,10 @@ export function CategoriesForm() {
   }, [responseFindOnde]);
 
   useEffect(() => {
-    if (response || responseUpdate) navigate("/categories");
+    if (response || responseUpdate) {
+      navigate("/categories");
+      setFields(initialState);
+    }
   }, [response, responseUpdate]);
 
   const handleSubmit = (e: React.FormEvent) => {

@@ -9,17 +9,26 @@ import { useRequestCreate } from "../../hooks/useRequestCreate";
 import { useRequestUpdate } from "../../hooks/useRequestUpdate";
 import { useRequestFindOne } from "../../hooks/useRequestFindOne";
 import { Products } from "../../pages/Products";
+import { InputAsync } from "../InputAsync";
+import { Categories } from "../../pages/Categories";
+
+const initialState = {
+  name: "",
+  description: null,
+  categoryId: "",
+  category: {
+    value: "",
+    label: "",
+  },
+  price: 0,
+  amount: 0,
+};
 
 export function ProductsForm() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  const [fields, setFields] = useState({
-    name: "",
-    description: null,
-    price: 0,
-    amount: 0,
-  });
+  const [fields, setFields] = useState(initialState);
 
   const [file, setFile] = useState<File | null>(null);
 
@@ -41,18 +50,14 @@ export function ProductsForm() {
   useEffect(() => {
     if (responseCreated || responseUpdated) {
       navigate("/products");
+      setFields(initialState);
     }
   }, [responseCreated, responseUpdated]);
 
   useEffect(() => {
     if (id) execFindOne();
     else {
-      setFields({
-        name: "",
-        description: null,
-        price: 0,
-        amount: 0,
-      });
+      setFields(initialState);
     }
   }, [id]);
 
@@ -61,12 +66,19 @@ export function ProductsForm() {
       setFields({
         ...fields,
         name: responseFindOne.name,
-        price: responseFindOne.price,
+        price: Number(responseFindOne.price),
         amount: responseFindOne.amount,
+        categoryId: responseFindOne.category?.id || "",
+        category: {
+          label: responseFindOne.category?.name || "",
+          value: responseFindOne.category?.id || "",
+        },
       });
 
       return;
     }
+
+    setFields(initialState);
   }, [responseFindOne]);
 
   const handleCancel = () => {
@@ -85,8 +97,25 @@ export function ProductsForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (id) execUpdate(fields);
-    else execCreate(fields);
+    const payload = {
+      ...fields,
+      price: Number(fields.price),
+    };
+
+    if (id) execUpdate(payload);
+    else execCreate(payload);
+  };
+
+  const handleSearchCategories = async (inputValue: string) => {
+    const response = await fetch(
+      `http://localhost:3334/api/v1/categories?q=${inputValue}`
+    );
+    const data = await response.json();
+
+    return data.map((category: Categories) => ({
+      label: category.name,
+      value: category.id,
+    }));
   };
 
   return (
@@ -154,10 +183,18 @@ export function ProductsForm() {
                 value={fields.name}
                 onChange={(e) => setFields({ ...fields, name: e.target.value })}
               />
-              <Input
-                label="Categoria"
-                placeholder="Digite a categoria do produto"
-                name="category"
+              <InputAsync
+                label="Categorias"
+                placeholder="Digite o nome da categoria"
+                promiseOptions={handleSearchCategories}
+                onChange={(value) =>
+                  setFields({
+                    ...fields,
+                    categoryId: value.value,
+                    category: value,
+                  })
+                }
+                value={fields.category}
               />
 
               <div
@@ -173,7 +210,10 @@ export function ProductsForm() {
                   name="price"
                   value={fields.price.toString()}
                   onChange={(e) =>
-                    setFields({ ...fields, price: Number(e.target.value) })
+                    setFields({
+                      ...fields,
+                      price: Number(e.target.value),
+                    })
                   }
                 />
                 <Input
