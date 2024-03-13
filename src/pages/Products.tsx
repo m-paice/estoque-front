@@ -1,6 +1,6 @@
 import { ProductsList } from "../components/ProductsList";
 import { ProductsDetails } from "../components/ProductsDetails";
-import { ProductsNew } from "../components/ProductsNew";
+import { ProductsForm } from "../components/ProductsForm";
 import { ProductsFilter } from "../components/ProductsFilter";
 import { useRequestFindMany } from "../hooks/useRequestFindMany";
 import { useLayoutEffect } from "react";
@@ -40,7 +40,7 @@ export function Products() {
       </div>
       <div style={styles.grid}>
         <div style={styles.wrapperActions}>
-          <ProductsNew />
+          <ProductsForm />
           <ProductsFilter />
         </div>
         <ProductsList products={products || []} />

@@ -10,7 +10,7 @@ import { useRequestUpdate } from "../../hooks/useRequestUpdate";
 import { useRequestFindOne } from "../../hooks/useRequestFindOne";
 import { Products } from "../../pages/Products";
 
-export function ProductsNew() {
+export function ProductsForm() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 

@@ -7,6 +7,7 @@ import { Header } from "./Header";
 interface Category {
   id: string;
   name: string;
+  products: unknown[];
 }
 
 export function CategoriesDetails() {
@@ -55,7 +56,7 @@ export function CategoriesDetails() {
           <Avatar />
           <div>
             <h4>{response?.name}</h4>
-            <p>51 produtos</p>
+            <p>{response.products.length} produtos</p>
           </div>
         </div>
       </section>

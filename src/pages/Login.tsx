@@ -73,8 +73,16 @@ export function Login() {
               gap: 20,
             }}
           >
-            <Input label="Usuário" placeholder="Digite seu usuário" />
-            <Input label="Senha" placeholder="Digite sua senha" />
+            <Input
+              name="username"
+              label="Usuário"
+              placeholder="Digite seu usuário"
+            />
+            <Input
+              name="password"
+              label="Senha"
+              placeholder="Digite sua senha"
+            />
 
             <label
               style={{

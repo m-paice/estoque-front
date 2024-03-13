@@ -8,7 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useRequestFindOne } from "../../hooks/useRequestFindOne";
 import { useRequestUpdate } from "../../hooks/useRequestUpdate";
 
-export function CategoriesNew() {
+export function CategoriesForm() {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
 

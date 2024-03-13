@@ -1,7 +1,7 @@
 import { useLayoutEffect } from "react";
 import { CategoriesList } from "../components/CategoriesList";
 import { CategoriesDetails } from "../components/CategoriesDetails";
-import { CategoriesNew } from "../components/CategoriesNew";
+import { CategoriesForm } from "../components/CategoriesForm";
 import { CategoriesFilter } from "../components/CategoriesFilter";
 import { useRequestFindMany } from "../hooks/useRequestFindMany";
 
@@ -37,7 +37,7 @@ export function Categories() {
       </div>
       <div style={styles.grid}>
         <div style={styles.wrapperActions}>
-          <CategoriesNew />
+          <CategoriesForm />
           <CategoriesFilter />
         </div>
         <CategoriesList categories={response || []} />
