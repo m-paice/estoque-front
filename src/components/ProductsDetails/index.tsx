@@ -1,7 +1,40 @@
+import { useParams } from "react-router-dom";
 import { Avatar } from "../Avatar";
 import { Header } from "./Header";
+import { useEffect } from "react";
+import { useRequestFindOne } from "../../hooks/useRequestFindOne";
+import { Products } from "../../pages/Products";
 
 export function ProductsDetails() {
+  const { id } = useParams<{ id: string }>();
+
+  const { execute: execFindOne, response: responseFindOne } =
+    useRequestFindOne<Products>({
+      id: id!,
+      path: "/products",
+    });
+
+  useEffect(() => {
+    if (id) execFindOne();
+  }, [id]);
+
+  if (!id || !responseFindOne)
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          flexDirection: "column",
+          alignItems: "center",
+          height: "100%",
+          width: "100%",
+        }}
+      >
+        <img src="/selected.jpg" width={300} alt="Nenhum item encontrado" />
+        <h4>Selecione um produto para ver mais informações</h4>
+      </div>
+    );
+
   return (
     <div>
       <Header />
@@ -18,8 +51,8 @@ export function ProductsDetails() {
         >
           <Avatar />
           <div>
-            <h4>Notebook</h4>
-            <p>Tecnologia</p>
+            <h4>{responseFindOne.name}</h4>
+            <p>{responseFindOne?.category}</p>
           </div>
         </div>
 
@@ -37,11 +70,16 @@ export function ProductsDetails() {
           >
             <div>
               <p>Preço:</p>
-              <p>R$ 1.200,00</p>
+              <p>
+                {responseFindOne.price.toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                })}
+              </p>
             </div>
             <div>
               <p>Quantidade em estoque:</p>
-              <p>10</p>
+              <p>{responseFindOne.amount}</p>
             </div>
           </div>
         </div>

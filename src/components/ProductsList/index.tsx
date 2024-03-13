@@ -1,16 +1,14 @@
+import { useNavigate } from "react-router-dom";
 import { MagnifyingGlassIcon } from "@heroicons/react/20/solid";
 import { useMemo, useState } from "react";
+import { Products } from "../../pages/Products";
 
 interface Props {
-  products: {
-    id: string;
-    name: string;
-    category: string;
-    price: number;
-  }[];
+  products: Products[];
 }
 
 export function ProductsList({ products }: Props) {
+  const navigate = useNavigate();
   const [search, setSearch] = useState("");
   const [selected, setSelected] = useState("");
   const [isHovered, setIsHovered] = useState("");
@@ -22,6 +20,11 @@ export function ProductsList({ products }: Props) {
         )
       : [];
   }, [search, products]);
+
+  const handleClickItem = (itemId: string) => {
+    setSelected(itemId);
+    navigate(`/products/${itemId}`);
+  };
 
   return (
     <div
@@ -82,7 +85,7 @@ export function ProductsList({ products }: Props) {
                     : "",
                 backgroundColor: isHovered === product.id ? "#E8ECF4" : "",
               }}
-              onClick={() => setSelected(product.id)}
+              onClick={() => handleClickItem(product.id)}
               onMouseEnter={() => setIsHovered(product.id)}
               onMouseLeave={() => setIsHovered("")}
             >

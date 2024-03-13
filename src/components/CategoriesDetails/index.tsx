@@ -21,7 +21,7 @@ export function CategoriesDetails() {
     if (id) execute();
   }, [id]);
 
-  if (!id)
+  if (!id || !response)
     return (
       <div
         style={{
@@ -33,7 +33,7 @@ export function CategoriesDetails() {
           width: "100%",
         }}
       >
-        <img src="/selected.jpg" width={500} alt="Nenhum item encontrado" />
+        <img src="/selected.jpg" width={300} alt="Nenhum item encontrado" />
         <h4>Selecione uma categoria para ver mais informações</h4>
       </div>
     );
