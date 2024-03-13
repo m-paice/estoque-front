@@ -9,8 +9,10 @@ import { Button } from "../components/Button";
 import { SelectedDay } from "../components/SelectedDay";
 import { Modal } from "../components/Modal";
 import { SalesNew } from "../components/SalesNew";
+import { useNavigate } from "react-router-dom";
 
 export function Sales() {
+  const navigate = useNavigate();
   const [currentDate, setCurrentDate] = useState(
     dayjs(new Date()).startOf("month")
   );
@@ -18,14 +20,18 @@ export function Sales() {
 
   const { toggle, onChangeToggle } = useToggle();
 
+  const handleCancel = () => {
+    onChangeToggle();
+    navigate("/sales");
+  };
+
   return (
     <div style={styles.container}>
       <section style={styles.leftSection}>
         <SelectedDay selectedDate={selectedDate} />
         <Items />
-        <Button size="large" onClick={onChangeToggle}>
-          {" "}
-          {"Registrar venda".toUpperCase()}{" "}
+        <Button size="large" onClick={handleCancel}>
+          {"Registrar venda".toUpperCase()}
         </Button>
       </section>
       <section style={styles.rightSection}>
@@ -40,9 +46,9 @@ export function Sales() {
       <Modal
         title="Registrando de venda"
         isOpen={toggle}
-        closeModal={onChangeToggle}
+        closeModal={handleCancel}
       >
-        <SalesNew onClose={onChangeToggle} />
+        <SalesNew />
       </Modal>
     </div>
   );

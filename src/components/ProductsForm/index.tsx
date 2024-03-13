@@ -14,7 +14,7 @@ import { Categories } from "../../pages/Categories";
 
 const initialState = {
   name: "",
-  description: null,
+  description: "",
   categoryId: "",
   category: {
     value: "",
@@ -66,6 +66,7 @@ export function ProductsForm() {
       setFields({
         ...fields,
         name: responseFindOne.name,
+        description: responseFindOne.description || "",
         price: Number(responseFindOne.price),
         amount: responseFindOne.amount,
         categoryId: responseFindOne.category?.id || "",
@@ -182,6 +183,15 @@ export function ProductsForm() {
                 name="name"
                 value={fields.name}
                 onChange={(e) => setFields({ ...fields, name: e.target.value })}
+              />
+              <Input
+                label="Descrição"
+                placeholder="Digite a descrição do produto"
+                name="description"
+                value={fields.description}
+                onChange={(e) =>
+                  setFields({ ...fields, description: e.target.value })
+                }
               />
               <InputAsync
                 label="Categorias"

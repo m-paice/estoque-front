@@ -1,6 +1,7 @@
 import { TrashIcon } from "@heroicons/react/20/solid";
 import { Avatar } from "../Avatar";
 import { useState } from "react";
+import { useSaleContext } from "../../context/sale";
 
 interface Props {
   id: string;
@@ -9,8 +10,10 @@ interface Props {
   amount: number;
 }
 
-export function ResumeItem({ id, name, price }: Props) {
+export function ResumeItem({ id, name, price, amount }: Props) {
   const [houver, setHouver] = useState(false);
+
+  const { removeProduct, additionAmount, subtractionAmount } = useSaleContext();
 
   return (
     <li
@@ -61,6 +64,7 @@ export function ResumeItem({ id, name, price }: Props) {
           }}
         >
           <button
+            onClick={() => additionAmount(id)}
             style={{
               backgroundColor: "#7E9EF0",
               color: "#fff",
@@ -74,8 +78,9 @@ export function ResumeItem({ id, name, price }: Props) {
           >
             +
           </button>
-          <p>1</p>
+          <p>{amount}</p>
           <button
+            onClick={() => subtractionAmount(id)}
             style={{
               backgroundColor: "#7E9EF0",
               color: "#fff",
@@ -90,6 +95,7 @@ export function ResumeItem({ id, name, price }: Props) {
             -
           </button>
           <TrashIcon
+            onClick={() => removeProduct(id)}
             onMouseEnter={() => setHouver(true)}
             onMouseLeave={() => setHouver(false)}
             style={{

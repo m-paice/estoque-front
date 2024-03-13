@@ -1,15 +1,7 @@
 import { CurrencyDollarIcon } from "@heroicons/react/20/solid";
 
 import { Button } from "../Button";
-
-interface Props {
-  products: {
-    id: string;
-    name: string;
-    price: number;
-    amount: number;
-  }[];
-}
+import { useSaleContext } from "../../context/sale";
 
 const Paragraph = ({ title, prefix }: { title: string; prefix?: string }) => (
   <p
@@ -24,7 +16,9 @@ const Paragraph = ({ title, prefix }: { title: string; prefix?: string }) => (
   </p>
 );
 
-export function Payment({ products }: Props) {
+export function Payment() {
+  const { products, client } = useSaleContext();
+
   return (
     <div
       style={{
@@ -69,9 +63,9 @@ export function Payment({ products }: Props) {
             </span>
           </div>
           <div>
-            <Paragraph title="Matheus Paice" />
-            <Paragraph title="460.551.121-98" prefix="CPF:" />
-            <Paragraph title="(11) 99845-5545" />
+            <Paragraph title={client.name} />
+            <Paragraph title={client.document} prefix="CPF:" />
+            <Paragraph title={client.cellphone} />
           </div>
         </div>
         <div
@@ -100,17 +94,32 @@ export function Payment({ products }: Props) {
             </span>
           </div>
           <div>
-            <Paragraph title="39400-000" />
-            <Paragraph title="Rua das Flores, 123" />
-            <Paragraph title="Jardim das Flores" />
+            <Paragraph title={client.address.zipCode} />
             <div
               style={{
                 display: "flex",
                 gap: 10,
               }}
             >
-              <Paragraph title="São Paulo" />
-              <Paragraph title="SP" />
+              <Paragraph title={client.address.street} />
+              <Paragraph title={client.address.number} />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                gap: 10,
+              }}
+            >
+              <Paragraph title={client.address.neighborhood} />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                gap: 10,
+              }}
+            >
+              <Paragraph title={client.address.city} />
+              <Paragraph title={client.address.state} />
             </div>
           </div>
         </div>
@@ -158,9 +167,11 @@ export function Payment({ products }: Props) {
               style={{
                 display: "grid",
                 gridTemplateColumns: "80px 1fr 120px 120px 120px",
+                borderBottom: "1px solid #e5e7eb",
+                paddingTop: 10,
               }}
             >
-              <p>#{product.id}</p>
+              <p>#{product.id.slice(0, 5)}</p>
               <p>{product.name}</p>
               <p style={{ textAlign: "right" }}>{product.amount}</p>
               <p style={{ textAlign: "right" }}>
@@ -180,50 +191,52 @@ export function Payment({ products }: Props) {
         </div>
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          gap: 10,
-        }}
-      >
-        <p
+      <div>
+        <div
           style={{
-            fontSize: 16,
+            display: "flex",
+            justifyContent: "flex-end",
+            gap: 10,
           }}
         >
-          Taxa de entrega
-        </p>
-        <p style={{ textAlign: "right", fontSize: 16 }}>
-          {(20).toLocaleString("pt-BR", {
-            style: "currency",
-            currency: "BRL",
-          })}
-        </p>
-      </div>
-
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          gap: 10,
-        }}
-      >
-        <p
-          style={{
-            fontSize: 20,
-          }}
-        >
-          Total
-        </p>
-        <p style={{ textAlign: "right", fontSize: 20 }}>
-          {products
-            .reduce((acc, product) => acc + product.price * product.amount, 0)
-            .toLocaleString("pt-BR", {
+          <p
+            style={{
+              fontSize: 16,
+            }}
+          >
+            Taxa de entrega
+          </p>
+          <p style={{ textAlign: "right", fontSize: 16 }}>
+            {(20).toLocaleString("pt-BR", {
               style: "currency",
               currency: "BRL",
             })}
-        </p>
+          </p>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            gap: 10,
+          }}
+        >
+          <p
+            style={{
+              fontSize: 20,
+            }}
+          >
+            Total
+          </p>
+          <p style={{ textAlign: "right", fontSize: 20 }}>
+            {products
+              .reduce((acc, product) => acc + product.price * product.amount, 0)
+              .toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              })}
+          </p>
+        </div>
       </div>
 
       <div

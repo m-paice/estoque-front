@@ -1,6 +1,31 @@
+import { useEffect } from "react";
+import { useSaleContext } from "../../context/sale";
 import { Input } from "../Input";
 
 export function Client() {
+  const { handleSetClient, client } = useSaleContext();
+
+  useEffect(() => {
+    if (client.address.zipCode.length === 8) {
+      fetch(`https://viacep.com.br/ws/${client.address.zipCode}/json/`)
+        .then((response) => response.json())
+        .then((data) => {
+          handleSetClient({
+            ...client,
+            address: {
+              street: data.logradouro,
+              neighborhood: data.bairro,
+              city: data.localidade,
+              state: data.uf,
+              zipCode: client.address.zipCode,
+              number: "",
+              complement: "",
+            },
+          });
+        });
+    }
+  }, [client.address.zipCode]);
+
   return (
     <div
       style={{
@@ -12,7 +37,15 @@ export function Client() {
       <div>
         <h4>Dados pesoais</h4>
         <div>
-          <Input label="Nome" placeholder="Digite o nome do cliente" />
+          <Input
+            name="name"
+            label="Nome"
+            placeholder="Digite o nome do cliente"
+            onChange={(e) =>
+              handleSetClient({ ...client, name: e.target.value })
+            }
+            value={client.name}
+          />
           <div
             style={{
               display: "grid",
@@ -21,17 +54,51 @@ export function Client() {
             }}
           >
             <Input
+              name="cellphone"
               label="Telefone"
               placeholder="Digite o telefone do cliente"
+              onChange={(e) =>
+                handleSetClient({
+                  ...client,
+                  cellphone: e.target.value
+                    .replace(/\D/g, "")
+                    .replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3"),
+                })
+              }
+              value={client.cellphone}
             />
-            <Input label="CPF" placeholder="Digite o CPF do cliente" />
+            <Input
+              name="document"
+              label="CPF"
+              placeholder="Digite o CPF do cliente"
+              onChange={(e) =>
+                handleSetClient({
+                  ...client,
+                  document: e.target.value
+                    .replace(/\D/g, "")
+                    .replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4"),
+                })
+              }
+              value={client.document}
+            />
           </div>
         </div>
       </div>
       <div>
         <h4>Endereço</h4>
         <div>
-          <Input label="CEP" placeholder="Digite o CEP " />
+          <Input
+            label="CEP"
+            placeholder="Digite o CEP"
+            name="zipcode"
+            onChange={(e) =>
+              handleSetClient({
+                ...client,
+                address: { ...client.address, zipCode: e.target.value },
+              })
+            }
+            value={client.address.zipCode}
+          />
           <div
             style={{
               display: "grid",
@@ -39,21 +106,87 @@ export function Client() {
               gap: 20,
             }}
           >
-            <Input label="Rua" placeholder="Digite a rua" />
-            <Input label="Número" placeholder="Digite o número" />
+            <Input
+              label="Rua"
+              placeholder="Digite a rua"
+              name="street"
+              value={client.address.street}
+              onChange={(e) =>
+                handleSetClient({
+                  ...client,
+                  address: { ...client.address, street: e.target.value },
+                })
+              }
+            />
+            <Input
+              label="Número"
+              placeholder="Digite o número"
+              name="number"
+              value={client.address.number}
+              onChange={(e) =>
+                handleSetClient({
+                  ...client,
+                  address: { ...client.address, number: e.target.value },
+                })
+              }
+            />
           </div>
-          <Input label="Complemento" placeholder="Digite o complemento" />
+          <Input
+            label="Complemento"
+            placeholder="Digite o complemento"
+            name="complement"
+            value={client.address.complement}
+            onChange={(e) =>
+              handleSetClient({
+                ...client,
+                address: { ...client.address, complement: e.target.value },
+              })
+            }
+          />
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "1fr 1fr",
+              gridTemplateColumns: "1fr 1fr 80px",
               gap: 20,
             }}
           >
-            <Input label="Bairro" placeholder="Digite o bairro" />
-            <Input label="Cidade" placeholder="Digite a cidade" />
+            <Input
+              label="Bairro"
+              placeholder="Digite o bairro"
+              name="neighborhood"
+              value={client.address.neighborhood}
+              onChange={(e) =>
+                handleSetClient({
+                  ...client,
+                  address: { ...client.address, neighborhood: e.target.value },
+                })
+              }
+            />
+            <Input
+              label="Cidade"
+              placeholder="Digite a cidade"
+              name="city"
+              value={client.address.city}
+              onChange={(e) =>
+                handleSetClient({
+                  ...client,
+                  address: { ...client.address, city: e.target.value },
+                })
+              }
+            />
+            <Input
+              label="Estado"
+              placeholder="Digite o estado"
+              name="state"
+              value={client.address.state}
+              onChange={(e) =>
+                handleSetClient({
+                  ...client,
+                  address: { ...client.address, state: e.target.value },
+                })
+              }
+            />
           </div>
-          <Input label="Estado" placeholder="Digite o estado" />
         </div>
       </div>
     </div>

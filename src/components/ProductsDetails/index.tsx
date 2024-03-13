@@ -62,10 +62,13 @@ export function ProductsDetails() {
           }}
         >
           <h4>Informações do produto</h4>
+          <div>
+            <p>{responseFindOne.description}</p>
+          </div>
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "1fr 1fr",
+              gridTemplateColumns: "80px 200px",
             }}
           >
             <div>

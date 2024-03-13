@@ -8,12 +8,15 @@ import { useLayoutEffect } from "react";
 export interface Products {
   id: string;
   name: string;
+  description: string;
   category: {
     id: string;
     name: string;
   } | null;
   price: number;
   amount: number;
+  colors: string[];
+  sizes: string[];
 }
 
 export function Products() {

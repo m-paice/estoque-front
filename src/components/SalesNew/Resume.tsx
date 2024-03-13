@@ -27,7 +27,15 @@ export function Resume({ products }: Props) {
         }}
       >
         <p>Resumo</p>
-        <p>Total: R$ 200,00</p>
+        <p>
+          Total:
+          {products
+            .reduce((acc, product) => acc + product.price * product.amount, 0)
+            .toLocaleString("pt-br", {
+              style: "currency",
+              currency: "BRL",
+            })}
+        </p>
       </header>
 
       <main

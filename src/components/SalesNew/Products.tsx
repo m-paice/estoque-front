@@ -1,18 +1,12 @@
+import { useSaleContext } from "../../context/sale";
 import { Categories } from "./Categories";
 import { Details } from "./Details";
 import { ProductsList } from "./ProductsList";
 import { Resume } from "./Resume";
 
-interface Props {
-  products: {
-    id: string;
-    name: string;
-    price: number;
-    amount: number;
-  }[];
-}
+export function Products() {
+  const { products } = useSaleContext();
 
-export function Products({ products }: Props) {
   return (
     <div
       style={{
@@ -32,7 +26,7 @@ export function Products({ products }: Props) {
         <ProductsList />
         <Details />
       </div>
-      <Resume products={products.slice(0, 3)} />
+      <Resume products={products} />
     </div>
   );
 }
