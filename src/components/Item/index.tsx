@@ -1,12 +1,20 @@
 import { useState } from "react";
+import { Order } from "../../pages/Sales";
 
-interface Props {
-  text: string;
-  color: string;
-}
+// 'awaiting', 'canceled', 'delivered', 'in_progress', 'approved'
 
-export function Item({ text, color }: Props) {
+const statusTypes: { [key: string]: string } = {
+  awaiting: "Aguardando",
+  canceled: "Cancelado",
+  delivered: "Entregue",
+  in_progress: "Em andamento",
+  approved: "Aprovado",
+};
+
+export function Item(order: Order) {
   const [isHovered, setIsHovered] = useState("");
+
+  const status = statusTypes[order.status];
 
   return (
     <div
@@ -17,12 +25,12 @@ export function Item({ text, color }: Props) {
     >
       <div
         className="item"
-        onMouseEnter={() => setIsHovered(text)}
+        onMouseEnter={() => setIsHovered(order.id)}
         onMouseLeave={() => setIsHovered("")}
         style={{
           ...styles.item,
           transition: "0.3s",
-          color: isHovered === text ? "#7E9EF0" : "black",
+          color: isHovered === order.id ? "#7E9EF0" : "black",
         }}
       >
         <div
@@ -32,10 +40,26 @@ export function Item({ text, color }: Props) {
             width: "100%",
           }}
         >
-          <b style={{ fontSize: 18 }}>8:00 AM</b>
+          <p style={{ fontSize: 16 }}>{status}</p>
+          <span>{new Date(order.createdAt).toLocaleDateString()}</span>
         </div>
-        <p style={{ fontSize: 16 }}>Matheus Paice</p>
-        <p style={{ fontSize: 16 }}>Notebook, Teclado, Mouse</p>
+        <div
+          style={{
+            display: "flex",
+            gap: 10,
+          }}
+        >
+          <p style={{ fontSize: 16 }}>
+            R${" "}
+            {order.total.toLocaleString("pt-BR", {
+              style: "currency",
+              currency: "BRL",
+            })}
+          </p>
+
+          <p>{order.products.length} produtos</p>
+        </div>
+        <p>Compra {order.userId ? "no app" : "na loja"}</p>
       </div>
     </div>
   );

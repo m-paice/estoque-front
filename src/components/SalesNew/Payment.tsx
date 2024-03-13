@@ -17,7 +17,7 @@ const Paragraph = ({ title, prefix }: { title: string; prefix?: string }) => (
 );
 
 export function Payment() {
-  const { products, client } = useSaleContext();
+  const { products, client, handleSubmitSale } = useSaleContext();
 
   return (
     <div
@@ -246,7 +246,7 @@ export function Payment() {
         }}
       >
         <div>
-          <Button>
+          <Button onClick={handleSubmitSale}>
             <div
               style={{
                 display: "flex",

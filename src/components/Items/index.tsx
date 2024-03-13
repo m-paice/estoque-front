@@ -2,24 +2,21 @@ import { CSSProperties } from "react";
 
 import { colors } from "../../theme";
 import { Item } from "../Item";
+import { Order } from "../../pages/Sales";
 
-const status: { [key: number]: { color: string; text: string } } = {
-  1: { color: "#13deb9", text: "finalizado" },
-  2: { color: "#ffae1f", text: "pendente" },
-  3: { color: "#fa896b", text: "cancelado" },
-};
+interface Props {
+  orders: Order[];
+}
 
-export function Items() {
+export function Items({ orders }: Props) {
   return (
     <div>
       <div>
-        <span style={styles.title}>8 vendas</span>
+        <span style={styles.title}>{orders.length} vendas</span>
       </div>
       <div style={styles.container}>
-        {Array.from({ length: 8 }).map((_, i) => {
-          const { color, text } = status[Math.floor(Math.random() * 3) + 1];
-
-          return <Item key={i} text={text} color={color} />;
+        {(orders || []).map((item) => {
+          return <Item key={item.id} {...item} />;
         })}
       </div>
     </div>

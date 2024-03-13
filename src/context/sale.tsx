@@ -5,6 +5,7 @@ import {
   useMemo,
   useState,
 } from "react";
+import { api } from "../services/api";
 
 interface Address {
   zipCode: string;
@@ -44,6 +45,8 @@ interface SaleContextData {
   handleSetClient(client: Client): void;
   category: string;
   handleSetCategory(category: string): void;
+
+  handleSubmitSale(): void;
 }
 export const SaleContext = createContext({} as SaleContextData);
 
@@ -67,6 +70,16 @@ export const SaleContextProvider = ({
   });
   const [products, setProducts] = useState<SaleContextData["products"]>([]);
   const [category, setCategory] = useState("");
+
+  const handleSubmitSale = useCallback(() => {
+    api.post("/orders", {
+      products: products.map((item) => ({
+        id: item.id,
+        amount: item.amount,
+      })),
+      status: "approved",
+    });
+  }, [products]);
 
   const handleSetClient = useCallback((client: Client) => {
     setClient(client);
@@ -151,6 +164,7 @@ export const SaleContextProvider = ({
       handleSetCategory,
       client,
       handleSetClient,
+      handleSubmitSale,
     }),
     [
       products,
@@ -162,6 +176,7 @@ export const SaleContextProvider = ({
       handleSetCategory,
       client,
       handleSetClient,
+      handleSubmitSale,
     ]
   );
 

@@ -1,15 +1,26 @@
-import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 
 import { Styles } from "../types/home";
+import { Products } from "./Products";
 import { useToggle } from "../hooks/useToggle";
+import { useRequestFindMany } from "../hooks/useRequestFindMany";
 import { Calendar } from "../components/Calendar";
 import { Items } from "../components/Items";
 import { Button } from "../components/Button";
 import { SelectedDay } from "../components/SelectedDay";
 import { Modal } from "../components/Modal";
 import { SalesNew } from "../components/SalesNew";
-import { useNavigate } from "react-router-dom";
+
+export interface Order {
+  id: string;
+  total: number;
+  status: string;
+  createdAt: Date;
+  products: Products[];
+  userId: string | null;
+}
 
 export function Sales() {
   const navigate = useNavigate();
@@ -25,11 +36,35 @@ export function Sales() {
     navigate("/sales");
   };
 
+  const { execute: execFindOrders, response: orders } =
+    useRequestFindMany<Order>({
+      path: "/orders",
+      defaultQuery: {
+        where: {
+          createdAt: {
+            $gte: selectedDate.startOf("day").toISOString(),
+            $lte: selectedDate.endOf("day").toISOString(),
+          },
+        },
+      },
+    });
+
+  useEffect(() => {
+    execFindOrders({
+      where: {
+        createdAt: {
+          $gte: selectedDate.startOf("day").toISOString(),
+          $lte: selectedDate.endOf("day").toISOString(),
+        },
+      },
+    });
+  }, [selectedDate]);
+
   return (
     <div style={styles.container}>
       <section style={styles.leftSection}>
         <SelectedDay selectedDate={selectedDate} />
-        <Items />
+        <Items orders={orders || []} />
         <Button size="large" onClick={handleCancel}>
           {"Registrar venda".toUpperCase()}
         </Button>
