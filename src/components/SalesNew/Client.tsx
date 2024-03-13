@@ -176,7 +176,7 @@ export function Client() {
             />
             <Input
               label="Estado"
-              placeholder="Digite o estado"
+              placeholder="UF"
               name="state"
               value={client.address.state}
               onChange={(e) =>

@@ -1,19 +1,14 @@
 import dayjs from "dayjs";
 import { Button } from "../Button";
 import { CSSProperties } from "react";
+import { OrdersCalendar } from "../../pages/Sales";
 
 interface Props {
   currentDate: dayjs.Dayjs;
   selectedDate: dayjs.Dayjs;
+  orders: OrdersCalendar;
   setSelectedDate: (date: dayjs.Dayjs) => void;
   setCurrentDate: (date: dayjs.Dayjs) => void;
-}
-
-interface Schedules {
-  [key: string]: {
-    id: number;
-    status: "confirmed" | "canceled" | "pending";
-  }[];
 }
 
 const daysOfWeek = [
@@ -26,55 +21,10 @@ const daysOfWeek = [
   "SÁBADO",
 ];
 
-const schedules: Schedules = {
-  "02-02-2024": [
-    {
-      id: 1,
-      status: "confirmed",
-    },
-
-    {
-      id: 3,
-      status: "pending",
-    },
-  ],
-  "05-02-2024": [
-    {
-      id: 1,
-      status: "confirmed",
-    },
-    {
-      id: 2,
-      status: "canceled",
-    },
-    {
-      id: 3,
-      status: "pending",
-    },
-    {
-      id: 4,
-      status: "pending",
-    },
-    {
-      id: 5,
-      status: "confirmed",
-    },
-  ],
-  "20-02-2024": [
-    {
-      id: 1,
-      status: "confirmed",
-    },
-    {
-      id: 2,
-      status: "canceled",
-    },
-  ],
-};
-
 export function Calendar({
   selectedDate,
   currentDate,
+  orders,
   setSelectedDate,
   setCurrentDate,
 }: Props) {
@@ -146,29 +96,29 @@ export function Calendar({
                   .day(i * 7 + j)
                   .format("D");
 
-                const schedulesConfirmed = (
-                  schedules[
+                const ordersConfirmed = (
+                  orders[
                     dayjs(currentDate)
                       .day(i * 7 + j)
                       .format("DD-MM-YYYY")
                   ] ?? []
-                ).filter((schedule) => schedule.status === "confirmed");
+                ).filter((schedule) => schedule.status === "approved");
 
-                const schedulesCanceled = (
-                  schedules[
+                const ordersCanceled = (
+                  orders[
                     dayjs(currentDate)
                       .day(i * 7 + j)
                       .format("DD-MM-YYYY")
                   ] ?? []
                 ).filter((schedule) => schedule.status === "canceled");
 
-                const schedulesPending = (
-                  schedules[
+                const ordersPending = (
+                  orders[
                     dayjs(currentDate)
                       .day(i * 7 + j)
                       .format("DD-MM-YYYY")
                   ] ?? []
-                ).filter((schedule) => schedule.status === "pending");
+                ).filter((schedule) => schedule.status === "awaiting");
 
                 return (
                   <div
@@ -183,7 +133,7 @@ export function Calendar({
                         dayjs(currentDate)
                           .day(i * 7 + j)
                           .format("YYYY-MM-DD")
-                          ? "red"
+                          ? "#7E9EF0"
                           : "#ccc",
                       color:
                         dayjs(currentDate).format("YYYY") ===
@@ -194,12 +144,12 @@ export function Calendar({
                           .day(i * 7 + j)
                           .format("D") === dayjs(new Date()).format("D") &&
                         i === 0
-                          ? "red"
+                          ? "#7E9EF0"
                           : selectedDate.format("YYYY-MM-DD") ===
                             dayjs(currentDate)
                               .day(i * 7 + j)
                               .format("YYYY-MM-DD")
-                          ? "red"
+                          ? "#7E9EF0"
                           : "gray",
                     }}
                   >
@@ -221,19 +171,19 @@ export function Calendar({
                         padding: "0 5px",
                       }}
                     >
-                      {schedulesConfirmed.length > 0 && (
+                      {ordersConfirmed.length > 0 && (
                         <div style={{ ...styles.badge, ...styles.confirmed }}>
-                          {schedulesConfirmed.length} item
+                          {ordersConfirmed.length} item
                         </div>
                       )}
-                      {schedulesCanceled.length > 0 && (
+                      {ordersCanceled.length > 0 && (
                         <div style={{ ...styles.badge, ...styles.canceled }}>
-                          {schedulesCanceled.length} item
+                          {ordersCanceled.length} item
                         </div>
                       )}
-                      {schedulesPending.length > 0 && (
+                      {ordersPending.length > 0 && (
                         <div style={{ ...styles.badge, ...styles.pending }}>
-                          {schedulesPending.length} item
+                          {ordersPending.length} item
                         </div>
                       )}
                     </div>

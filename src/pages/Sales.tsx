@@ -22,6 +22,13 @@ export interface Order {
   userId: string | null;
 }
 
+export interface OrdersCalendar {
+  [key: string]: {
+    id: string;
+    status: string;
+  }[];
+}
+
 export function Sales() {
   const navigate = useNavigate();
   const [currentDate, setCurrentDate] = useState(
@@ -49,6 +56,30 @@ export function Sales() {
       },
     });
 
+  const { execute: execAllOrdersFromMonth, response: allOrderFromMonth } =
+    useRequestFindMany<Order>({
+      path: "/orders",
+      defaultQuery: {
+        where: {
+          createdAt: {
+            $gte: currentDate.startOf("month").toISOString(),
+            $lte: currentDate.endOf("month").toISOString(),
+          },
+        },
+      },
+    });
+
+  useEffect(() => {
+    execAllOrdersFromMonth({
+      where: {
+        createdAt: {
+          $gte: currentDate.startOf("month").toISOString(),
+          $lte: currentDate.endOf("month").toISOString(),
+        },
+      },
+    });
+  }, [currentDate]);
+
   useEffect(() => {
     execFindOrders({
       where: {
@@ -59,6 +90,24 @@ export function Sales() {
       },
     });
   }, [selectedDate]);
+
+  const ordersToCalendar: OrdersCalendar = (allOrderFromMonth || []).reduce(
+    (acc, order) => {
+      const date = dayjs(order.createdAt).format("DD-MM-YYYY");
+
+      if (!acc[date]) {
+        acc[date] = [];
+      }
+
+      acc[date].push({
+        id: order.id,
+        status: order.status,
+      });
+
+      return acc;
+    },
+    {} as OrdersCalendar
+  );
 
   return (
     <div style={styles.container}>
@@ -71,6 +120,7 @@ export function Sales() {
       </section>
       <section style={styles.rightSection}>
         <Calendar
+          orders={ordersToCalendar}
           selectedDate={selectedDate}
           currentDate={currentDate}
           setSelectedDate={setSelectedDate}
