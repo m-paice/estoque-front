@@ -1,7 +1,9 @@
 import { Outlet } from "react-router-dom";
 import { Sidebar } from "../components/Sidebar";
+
 import { Header } from "../components/Header";
 import { useLayoutContext } from "../context/layout";
+import { SaleContextProvider } from "../context/sale";
 
 export function DashboardLayout() {
   const { hideSidebar } = useLayoutContext();
@@ -16,7 +18,9 @@ export function DashboardLayout() {
       <Header />
       <Sidebar />
       <main style={styles.main}>
-        <Outlet />
+        <SaleContextProvider>
+          <Outlet />
+        </SaleContextProvider>
       </main>
     </div>
   );

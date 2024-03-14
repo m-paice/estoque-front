@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Order } from "../../pages/Sales";
+import { useNavigate } from "react-router-dom";
 
 // 'awaiting', 'canceled', 'delivered', 'in_progress', 'approved'
 
@@ -12,6 +13,7 @@ const statusTypes: { [key: string]: string } = {
 };
 
 export function Item(order: Order) {
+  const navigate = useNavigate();
   const [isHovered, setIsHovered] = useState("");
 
   const status = statusTypes[order.status];
@@ -25,6 +27,7 @@ export function Item(order: Order) {
     >
       <div
         className="item"
+        onClick={() => navigate(`/sales/${order.id}/details`)}
         onMouseEnter={() => setIsHovered(order.id)}
         onMouseLeave={() => setIsHovered("")}
         style={{
@@ -41,7 +44,7 @@ export function Item(order: Order) {
           }}
         >
           <p style={{ fontSize: 16 }}>{status}</p>
-          <span>{new Date(order.createdAt).toLocaleDateString()}</span>
+          <span>{new Date(order.createdAt).toLocaleTimeString()}</span>
         </div>
         <div
           style={{
@@ -59,7 +62,16 @@ export function Item(order: Order) {
 
           <p>{order.products.length} produtos</p>
         </div>
-        <p>Compra {order.userId ? "no app" : "na loja"}</p>
+        <div>
+          <p
+            style={{
+              fontSize: 16,
+              fontWeight: "bold",
+            }}
+          >
+            {order?.user?.name}
+          </p>
+        </div>
       </div>
     </div>
   );

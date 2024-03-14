@@ -6,8 +6,8 @@ export function Client() {
   const { handleSetClient, client } = useSaleContext();
 
   useEffect(() => {
-    if (client.address.zipCode.length === 8) {
-      fetch(`https://viacep.com.br/ws/${client.address.zipCode}/json/`)
+    if (client.address.zipcode.length === 8) {
+      fetch(`https://viacep.com.br/ws/${client.address.zipcode}/json/`)
         .then((response) => response.json())
         .then((data) => {
           handleSetClient({
@@ -17,14 +17,14 @@ export function Client() {
               neighborhood: data.bairro,
               city: data.localidade,
               state: data.uf,
-              zipCode: client.address.zipCode,
+              zipcode: client.address.zipcode,
               number: "",
               complement: "",
             },
           });
         });
     }
-  }, [client.address.zipCode]);
+  }, [client.address.zipcode]);
 
   return (
     <div
@@ -54,18 +54,18 @@ export function Client() {
             }}
           >
             <Input
-              name="cellphone"
+              name="cellPhone"
               label="Telefone"
               placeholder="Digite o telefone do cliente"
               onChange={(e) =>
                 handleSetClient({
                   ...client,
-                  cellphone: e.target.value
+                  cellPhone: e.target.value
                     .replace(/\D/g, "")
                     .replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3"),
                 })
               }
-              value={client.cellphone}
+              value={client.cellPhone}
             />
             <Input
               name="document"
@@ -94,10 +94,10 @@ export function Client() {
             onChange={(e) =>
               handleSetClient({
                 ...client,
-                address: { ...client.address, zipCode: e.target.value },
+                address: { ...client.address, zipcode: e.target.value },
               })
             }
-            value={client.address.zipCode}
+            value={client.address.zipcode}
           />
           <div
             style={{

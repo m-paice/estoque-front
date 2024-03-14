@@ -1,25 +1,42 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import dayjs from "dayjs";
 
 import { Styles } from "../types/home";
 import { Products } from "./Products";
-import { useToggle } from "../hooks/useToggle";
 import { useRequestFindMany } from "../hooks/useRequestFindMany";
 import { Calendar } from "../components/Calendar";
 import { Items } from "../components/Items";
 import { Button } from "../components/Button";
 import { SelectedDay } from "../components/SelectedDay";
-import { Modal } from "../components/Modal";
+
 import { SalesNew } from "../components/SalesNew";
+import { SalesDetails } from "../components/SalesDetails";
+import { SalesDelete } from "../components/SalesDelete";
 
 export interface Order {
   id: string;
   total: number;
   status: string;
+  paymentMethod: string;
   createdAt: Date;
   products: Products[];
   userId: string | null;
+  user: {
+    id: string;
+    name: string;
+    document: string;
+    cellPhone: string;
+    addresses: {
+      street: string;
+      number: string;
+      complement: string;
+      neighborhood: string;
+      city: string;
+      state: string;
+      zipcode: string;
+    }[];
+  } | null;
 }
 
 export interface OrdersCalendar {
@@ -35,13 +52,6 @@ export function Sales() {
     dayjs(new Date()).startOf("month")
   );
   const [selectedDate, setSelectedDate] = useState(dayjs(new Date()));
-
-  const { toggle, onChangeToggle } = useToggle();
-
-  const handleCancel = () => {
-    onChangeToggle();
-    navigate("/sales");
-  };
 
   const { execute: execFindOrders, response: orders } =
     useRequestFindMany<Order>({
@@ -69,7 +79,7 @@ export function Sales() {
       },
     });
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     execAllOrdersFromMonth({
       where: {
         createdAt: {
@@ -78,9 +88,15 @@ export function Sales() {
         },
       },
     });
-  }, [currentDate]);
+  }, [
+    currentDate,
+    window.location.pathname.includes("/new"),
+    window.location.pathname.includes("/edit"),
+    window.location.pathname.includes("/delete"),
+    window.location.pathname.includes("/details"),
+  ]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     execFindOrders({
       where: {
         createdAt: {
@@ -89,7 +105,13 @@ export function Sales() {
         },
       },
     });
-  }, [selectedDate]);
+  }, [
+    selectedDate,
+    window.location.pathname.includes("/new"),
+    window.location.pathname.includes("/edit"),
+    window.location.pathname.includes("/delete"),
+    window.location.pathname.includes("/details"),
+  ]);
 
   const ordersToCalendar: OrdersCalendar = (allOrderFromMonth || []).reduce(
     (acc, order) => {
@@ -114,7 +136,7 @@ export function Sales() {
       <section style={styles.leftSection}>
         <SelectedDay selectedDate={selectedDate} />
         <Items orders={orders || []} />
-        <Button size="large" onClick={handleCancel}>
+        <Button size="large" onClick={() => navigate("/sales/new")}>
           {"Registrar venda".toUpperCase()}
         </Button>
       </section>
@@ -128,13 +150,9 @@ export function Sales() {
         />
       </section>
 
-      <Modal
-        title="Registrando de venda"
-        isOpen={toggle}
-        closeModal={handleCancel}
-      >
-        <SalesNew />
-      </Modal>
+      <SalesNew />
+      <SalesDetails />
+      <SalesDelete />
     </div>
   );
 }

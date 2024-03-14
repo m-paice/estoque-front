@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { colors } from "../../theme";
 
 interface Props {
   children?: React.ReactNode;
   variant?: "outiline" | "filled";
   onClick?: () => void;
   size?: "small" | "medium" | "large";
+  color?: "info" | "success" | "danger" | "warning";
 }
 
 const sizes = {
@@ -13,12 +13,19 @@ const sizes = {
   medium: "16px",
   large: "20px",
 };
+const colors = {
+  info: { background: "#BFCCED", text: "#FFFFFF", hover: "#7E9EF0" },
+  success: { background: "#4CAF50", text: "#FFFFFF", hover: "#7CB342" },
+  danger: { background: "#E57373", text: "#FFFFFF", hover: "#EF9A9A" },
+  warning: { background: "#FFC107", text: "#FFFFFF", hover: "#FFD54F" },
+};
 
 export function Button({
   children,
   variant = "filled",
   onClick,
   size = "medium",
+  color = "info",
 }: Props) {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -28,17 +35,31 @@ export function Button({
       style={{
         padding: "10px",
         transition: "0.3s",
+        // backgroundColor: isHovered
+        //   ? "#BFCCED"
+        //   : variant === "filled"
+        //   ? colors.primary
+        //   : "transparent",
+        // border: variant === "filled" ? "none" : `1px solid ${colors.primary}`,
+        // color: isHovered
+        //   ? colors.primary
+        //   : variant === "filled"
+        //   ? colors.white
+        //   : colors.primary,
         backgroundColor: isHovered
-          ? "#BFCCED"
+          ? colors[color].hover
           : variant === "filled"
-          ? colors.primary
+          ? colors[color].background
           : "transparent",
-        border: variant === "filled" ? "none" : `1px solid ${colors.primary}`,
+        border:
+          variant === "filled"
+            ? "none"
+            : `1px solid ${colors[color].background}`,
         color: isHovered
-          ? colors.primary
+          ? colors[color].text
           : variant === "filled"
-          ? colors.white
-          : colors.primary,
+          ? colors[color].text
+          : colors[color].background,
         borderRadius: "7px",
         cursor: "pointer",
         width: "100%",

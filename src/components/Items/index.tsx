@@ -27,6 +27,7 @@ const styles: { [key: string]: CSSProperties } = {
   container: {
     overflowY: "auto",
     height: "300px",
+    paddingRight: 10,
   },
   title: {
     color: colors.primary,

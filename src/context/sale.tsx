@@ -5,10 +5,11 @@ import {
   useMemo,
   useState,
 } from "react";
+import { useNavigate } from "react-router-dom";
 import { api } from "../services/api";
 
 interface Address {
-  zipCode: string;
+  zipcode: string;
   street: string;
   number: string;
   neighborhood: string;
@@ -20,7 +21,7 @@ interface Address {
 interface Client {
   name: string;
   document: string;
-  cellphone: string;
+  cellPhone: string;
   address: Address;
 }
 
@@ -55,12 +56,13 @@ export const SaleContextProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
+  const navigate = useNavigate();
   const [client, setClient] = useState<Client>({
     name: "",
     document: "",
-    cellphone: "",
+    cellPhone: "",
     address: {
-      zipCode: "",
+      zipcode: "",
       street: "",
       number: "",
       neighborhood: "",
@@ -72,14 +74,46 @@ export const SaleContextProvider = ({
   const [category, setCategory] = useState("");
 
   const handleSubmitSale = useCallback(() => {
-    api.post("/orders", {
-      products: products.map((item) => ({
-        id: item.id,
-        amount: item.amount,
-      })),
-      status: "approved",
-    });
-  }, [products]);
+    api
+      .post("/orders", {
+        products: products.map((item) => ({
+          id: item.id,
+          amount: item.amount,
+        })),
+        status: "approved",
+        user: {
+          name: client.name,
+          document: client.document,
+          cellPhone: client.cellPhone,
+          address: {
+            zipcode: client.address.zipcode,
+            street: client.address.street,
+            number: client.address.number,
+            neighborhood: client.address.neighborhood,
+            city: client.address.city,
+            state: client.address.state,
+            complement: client.address.complement,
+          },
+        },
+      })
+      .then(() => {
+        navigate("/sales");
+        setProducts([]);
+        setClient({
+          name: "",
+          document: "",
+          cellPhone: "",
+          address: {
+            zipcode: "",
+            street: "",
+            number: "",
+            neighborhood: "",
+            city: "",
+            state: "",
+          },
+        });
+      });
+  }, [products, client]);
 
   const handleSetClient = useCallback((client: Client) => {
     setClient(client);

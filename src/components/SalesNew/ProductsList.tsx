@@ -41,7 +41,7 @@ export function ProductsList() {
               paddingBlock: 5,
               color: productId === item.id ? "#7E9EF0" : "",
             }}
-            onClick={() => navigate(`/sales/${item.id}`)}
+            onClick={() => navigate(`/sales/new/${item.id}`)}
           >
             {item.name}
           </div>

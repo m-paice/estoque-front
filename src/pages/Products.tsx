@@ -1,9 +1,15 @@
+import { useLayoutEffect } from "react";
 import { ProductsList } from "../components/ProductsList";
 import { ProductsDetails } from "../components/ProductsDetails";
 import { ProductsForm } from "../components/ProductsForm";
 import { ProductsFilter } from "../components/ProductsFilter";
 import { useRequestFindMany } from "../hooks/useRequestFindMany";
-import { useLayoutEffect } from "react";
+
+interface OrderProducts {
+  amount: number;
+  price: number;
+  subtotal: number;
+}
 
 export interface Products {
   id: string;
@@ -17,6 +23,7 @@ export interface Products {
   amount: number;
   colors: string[];
   sizes: string[];
+  OrderProducts: OrderProducts;
 }
 
 export function Products() {

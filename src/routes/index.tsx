@@ -19,7 +19,19 @@ const router = createBrowserRouter([
         element: <Sales />,
       },
       {
-        path: "/sales/:productId",
+        path: "/sales/new",
+        element: <Sales />,
+      },
+      {
+        path: "/sales/new/:productId",
+        element: <Sales />,
+      },
+      {
+        path: "/sales/:saleId/details",
+        element: <Sales />,
+      },
+      {
+        path: "/sales/:saleId/delete",
         element: <Sales />,
       },
       {

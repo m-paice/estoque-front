@@ -3,6 +3,10 @@ import { CurrencyDollarIcon } from "@heroicons/react/20/solid";
 import { Button } from "../Button";
 import { useSaleContext } from "../../context/sale";
 
+interface Props {
+  setStep: (step: number) => void;
+}
+
 const Paragraph = ({ title, prefix }: { title: string; prefix?: string }) => (
   <p
     style={{
@@ -16,8 +20,13 @@ const Paragraph = ({ title, prefix }: { title: string; prefix?: string }) => (
   </p>
 );
 
-export function Payment() {
+export function Payment({ setStep }: Props) {
   const { products, client, handleSubmitSale } = useSaleContext();
+
+  const handleSubimit = () => {
+    handleSubmitSale();
+    setStep(1);
+  };
 
   return (
     <div
@@ -64,8 +73,8 @@ export function Payment() {
           </div>
           <div>
             <Paragraph title={client.name} />
+            <Paragraph title={client.cellPhone} />
             <Paragraph title={client.document} prefix="CPF:" />
-            <Paragraph title={client.cellphone} />
           </div>
         </div>
         <div
@@ -94,7 +103,7 @@ export function Payment() {
             </span>
           </div>
           <div>
-            <Paragraph title={client.address.zipCode} />
+            <Paragraph title={client.address.zipcode} />
             <div
               style={{
                 display: "flex",
@@ -239,27 +248,19 @@ export function Payment() {
         </div>
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-        }}
-      >
-        <div>
-          <Button onClick={handleSubmitSale}>
-            <div
-              style={{
-                display: "flex",
-                gap: 10,
-                alignItems: "center",
-              }}
-            >
-              <CurrencyDollarIcon width={20} />
-              Finalizar
-            </div>
-          </Button>
+      <Button onClick={handleSubimit}>
+        <div
+          style={{
+            display: "flex",
+            alignContent: "center",
+            justifyContent: "center",
+            gap: 10,
+          }}
+        >
+          <CurrencyDollarIcon width={20} />
+          Finalizar
         </div>
-      </div>
+      </Button>
     </div>
   );
 }
