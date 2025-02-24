@@ -2,6 +2,8 @@ import { CurrencyDollarIcon } from "@heroicons/react/20/solid";
 
 import { Button } from "../Button";
 import { useSaleContext } from "../../context/sale";
+import { TableItem } from "./TableItem";
+import { formatPrice } from "../../utils/formatPrice";
 
 interface Props {
   setStep: (step: number) => void;
@@ -15,7 +17,7 @@ const Paragraph = ({ title, prefix }: { title: string; prefix?: string }) => (
       // color: "#5a6a85",
     }}
   >
-    {prefix && <span style={{ fontWeight: "bold" }}>{prefix} </span>}
+    {title && prefix && <span style={{ fontWeight: "bold" }}>{prefix} </span>}
     {title}
   </p>
 );
@@ -53,24 +55,8 @@ export function Payment({ setStep }: Props) {
             padding: 15,
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: 10,
-            }}
-          >
-            <h4>{"Dados do cliente".toUpperCase()}</h4>
-            <span
-              style={{
-                color: "#5a6a85",
-                cursor: "pointer",
-              }}
-            >
-              editar
-            </span>
-          </div>
+          <h4>{"Dados do cliente".toUpperCase()}</h4>
+
           <div>
             <Paragraph title={client.name} />
             <Paragraph title={client.cellPhone} />
@@ -84,24 +70,8 @@ export function Payment({ setStep }: Props) {
             padding: 15,
           }}
         >
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: 10,
-            }}
-          >
-            <h4>{"Endereço".toUpperCase()}</h4>
-            <span
-              style={{
-                color: "#5a6a85",
-                cursor: "pointer",
-              }}
-            >
-              editar
-            </span>
-          </div>
+          <h4>{"Endereço".toUpperCase()}</h4>
+
           <div>
             <Paragraph title={client.address.zipcode} />
             <div
@@ -143,16 +113,24 @@ export function Payment({ setStep }: Props) {
       >
         <h4>{"Forma de pagamento".toUpperCase()}</h4>
         <input type="radio" name="payment" id="credit" />
-        <label htmlFor="credit">Cartão de crédito</label>
+        <label style={{ marginLeft: 5 }} htmlFor="credit">
+          Cartão de crédito
+        </label>
         <br />
         <input type="radio" name="payment" id="debit" />
-        <label htmlFor="debit">Cartão de débito</label>
+        <label style={{ marginLeft: 5 }} htmlFor="debit">
+          Cartão de débito
+        </label>
         <br />
         <input type="radio" name="payment" id="money" />
-        <label htmlFor="money">Dinheiro</label>
+        <label style={{ marginLeft: 5 }} htmlFor="money">
+          Dinheiro
+        </label>
         <br />
         <input type="radio" name="payment" id="pix" />
-        <label htmlFor="pix">Pix</label>
+        <label style={{ marginLeft: 5 }} htmlFor="pix">
+          Pix
+        </label>
       </div>
 
       <div>
@@ -170,32 +148,8 @@ export function Payment({ setStep }: Props) {
           <p style={{ textAlign: "right" }}>Total</p>
         </div>
         <div>
-          {products.map((product) => (
-            <div
-              key={product.id}
-              style={{
-                display: "grid",
-                gridTemplateColumns: "80px 1fr 120px 120px 120px",
-                borderBottom: "1px solid #e5e7eb",
-                paddingTop: 10,
-              }}
-            >
-              <p>#{product.id.slice(0, 5)}</p>
-              <p>{product.name}</p>
-              <p style={{ textAlign: "right" }}>{product.amount}</p>
-              <p style={{ textAlign: "right" }}>
-                {product.price.toLocaleString("pt-BR", {
-                  style: "currency",
-                  currency: "BRL",
-                })}
-              </p>
-              <p style={{ textAlign: "right" }}>
-                {(product.price * product.amount).toLocaleString("pt-BR", {
-                  style: "currency",
-                  currency: "BRL",
-                })}
-              </p>
-            </div>
+          {products.map((product, index) => (
+            <TableItem key={index} product={product} />
           ))}
         </div>
       </div>
@@ -238,12 +192,12 @@ export function Payment({ setStep }: Props) {
             Total
           </p>
           <p style={{ textAlign: "right", fontSize: 20 }}>
-            {products
-              .reduce((acc, product) => acc + product.price * product.amount, 0)
-              .toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              })}
+            {formatPrice(
+              products.reduce(
+                (acc, product) => acc + product.price * product.amount,
+                0
+              )
+            )}
           </p>
         </div>
       </div>

@@ -121,7 +121,7 @@ export function CategoriesForm() {
                 onChange={(e) => setFields({ ...fields, name: e.target.value })}
               />
 
-              <Button> Salvar </Button>
+              <Button type="submit"> Salvar </Button>
             </form>
           </div>
         </div>

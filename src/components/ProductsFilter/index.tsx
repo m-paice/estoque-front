@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const items = ["Todos", "Tecnologia", "Móveis", "Cozinha"];
+const items = ["Todos", "Recentes", "Favoritos", "Arquivados"];
 
 export function ProductsFilter() {
   const [selected, setSelected] = useState("Todos");

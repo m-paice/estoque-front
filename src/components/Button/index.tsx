@@ -6,6 +6,8 @@ interface Props {
   onClick?: () => void;
   size?: "small" | "medium" | "large";
   color?: "info" | "success" | "danger" | "warning";
+  icon?: boolean;
+  type?: "button" | "submit" | "reset";
 }
 
 const sizes = {
@@ -26,11 +28,14 @@ export function Button({
   onClick,
   size = "medium",
   color = "info",
+  icon = false,
+  type = "button",
 }: Props) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <button
+      type={type}
       onClick={onClick}
       style={{
         padding: "10px",
@@ -63,7 +68,7 @@ export function Button({
         borderRadius: "7px",
         cursor: "pointer",
         width: "100%",
-        minWidth: "100px",
+        minWidth: icon ? "auto" : "100px",
         fontSize: sizes[size] || sizes.medium,
         fontWeight: "bold",
         outline: "none",

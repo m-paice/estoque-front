@@ -1,3 +1,4 @@
+import { formatPrice } from "../../utils/formatPrice";
 import { ResumeItem } from "./ResumeItem";
 
 interface Props {
@@ -6,6 +7,8 @@ interface Props {
     name: string;
     price: number;
     amount: number;
+    color: string;
+    size: string;
   }[];
 }
 
@@ -29,12 +32,12 @@ export function Resume({ products }: Props) {
         <p>Resumo</p>
         <p>
           Total:
-          {products
-            .reduce((acc, product) => acc + product.price * product.amount, 0)
-            .toLocaleString("pt-br", {
-              style: "currency",
-              currency: "BRL",
-            })}
+          {formatPrice(
+            products.reduce(
+              (acc, product) => acc + product.price * product.amount,
+              0
+            )
+          )}
         </p>
       </header>
 
@@ -45,8 +48,8 @@ export function Resume({ products }: Props) {
           paddingRight: 10,
         }}
       >
-        {products.map((product) => (
-          <ResumeItem key={product.id} {...product} />
+        {products.map((product, index) => (
+          <ResumeItem key={index} index={index} {...product} />
         ))}
       </main>
     </div>

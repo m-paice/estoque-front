@@ -8,7 +8,7 @@ interface Props {
   value: {
     label: string;
     value: string;
-  };
+  }[];
 }
 
 export function InputAsync({
@@ -28,6 +28,7 @@ export function InputAsync({
         loadOptions={promiseOptions}
         onChange={onChange}
         value={value}
+        isMulti
       />
     </div>
   );

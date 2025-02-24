@@ -27,10 +27,13 @@ interface Client {
 
 interface SaleContextData {
   products: {
+    index?: string;
     id: string;
     name: string;
     price: number;
     amount: number;
+    color: string;
+    size: string;
   }[];
   addProduct: ({
     amount,
@@ -39,9 +42,9 @@ interface SaleContextData {
     product: SaleContextData["products"][0];
     amount: number;
   }) => void;
-  removeProduct: (id: string) => void;
-  additionAmount(productId: string): void;
-  subtractionAmount(productId: string): void;
+  removeProduct: (index: number) => void;
+  additionAmount(index: number): void;
+  subtractionAmount(index: number): void;
   client: Client;
   handleSetClient(client: Client): void;
   category: string;
@@ -79,6 +82,8 @@ export const SaleContextProvider = ({
         products: products.map((item) => ({
           id: item.id,
           amount: item.amount,
+          color: item.color,
+          size: item.size,
         })),
         status: "approved",
         user: {
@@ -124,9 +129,9 @@ export const SaleContextProvider = ({
   }, []);
 
   const additionAmount = useCallback(
-    (productId: string) => {
-      const newProducts = products.map((p) => {
-        if (p.id === productId) {
+    (index: number) => {
+      const newProducts = products.map((p, i) => {
+        if (i === index) {
           return { ...p, amount: p.amount + 1 };
         }
         return p;
@@ -138,16 +143,17 @@ export const SaleContextProvider = ({
   );
 
   const subtractionAmount = useCallback(
-    (productId: string) => {
-      if (products.find((p) => p.id === productId)?.amount === 1) return;
+    (index: number) => {
+      if (products[index].amount === 1) {
+        return;
+      }
 
-      const newProducts = products.map((p) => {
-        if (p.id === productId) {
+      const newProducts = products.map((p, i) => {
+        if (i === index) {
           return { ...p, amount: p.amount - 1 };
         }
         return p;
       });
-
       setProducts(newProducts);
     },
     [products]
@@ -161,13 +167,28 @@ export const SaleContextProvider = ({
       product: SaleContextData["products"][0];
       amount: number;
     }) => {
-      const productIndex = products.findIndex((p) => p.id === product.id);
+      const productIndex = products.findIndex(
+        (p) =>
+          p.id === product.id &&
+          p.color === product.color &&
+          p.size === product.size
+      );
 
       if (productIndex === -1) {
-        setProducts((prevState) => [...prevState, { ...product, amount }]);
+        setProducts((prevState) => [
+          ...prevState,
+          {
+            ...product,
+            amount,
+          },
+        ]);
       } else {
         const newProducts = products.map((p) => {
-          if (p.id === product.id) {
+          if (
+            p.id === product.id &&
+            p.color === product.color &&
+            p.size === product.size
+          ) {
             return { ...p, amount: p.amount + amount };
           }
           return p;
@@ -180,8 +201,8 @@ export const SaleContextProvider = ({
   );
 
   const removeProduct = useCallback(
-    (id: string) => {
-      const newProducts = products.filter((p) => p.id !== id);
+    (index: number) => {
+      const newProducts = products.filter((_, i) => i !== index);
       setProducts(newProducts);
     },
     [products]

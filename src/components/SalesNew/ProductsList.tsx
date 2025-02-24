@@ -17,9 +17,7 @@ export function ProductsList() {
   useEffect(() => {
     if (category) {
       execFindMany({
-        where: {
-          categoryId: category,
-        },
+        categories: [category],
       });
     }
   }, [category]);

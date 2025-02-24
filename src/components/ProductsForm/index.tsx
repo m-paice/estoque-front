@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { PlusCircleIcon, ArrowUturnRightIcon } from "@heroicons/react/20/solid";
 
 import { Button } from "../Button";
 import { Modal } from "../Modal";
@@ -11,17 +12,36 @@ import { useRequestFindOne } from "../../hooks/useRequestFindOne";
 import { Products } from "../../pages/Products";
 import { InputAsync } from "../InputAsync";
 import { Categories } from "../../pages/Categories";
+import { VariantItem } from "./VariantItem";
 
-const initialState = {
+interface InitialState {
+  name: string;
+  description: string;
+  categories: {
+    label: string;
+    value: string;
+  }[];
+  price: number;
+  amount: number;
+  color: string;
+  size: string;
+  variants: {
+    price: number;
+    amount: number;
+    color: string;
+    size: string;
+  }[];
+}
+
+const initialState: InitialState = {
   name: "",
   description: "",
-  categoryId: "",
-  category: {
-    value: "",
-    label: "",
-  },
+  categories: [],
   price: 0,
   amount: 0,
+  color: "",
+  size: "",
+  variants: [],
 };
 
 export function ProductsForm() {
@@ -29,7 +49,10 @@ export function ProductsForm() {
   const navigate = useNavigate();
 
   const [fields, setFields] = useState(initialState);
-
+  const [isEditing, setIsEditing] = useState({
+    status: false,
+    index: 0,
+  });
   const [file, setFile] = useState<File | null>(null);
 
   const { execute: execCreate, response: responseCreated } = useRequestCreate({
@@ -67,13 +90,20 @@ export function ProductsForm() {
         ...fields,
         name: responseFindOne.name,
         description: responseFindOne.description || "",
-        price: Number(responseFindOne.price),
-        amount: responseFindOne.amount,
-        categoryId: responseFindOne.category?.id || "",
-        category: {
-          label: responseFindOne.category?.name || "",
-          value: responseFindOne.category?.id || "",
-        },
+        price: 0,
+        amount: 0,
+        color: "",
+        size: "",
+        categories: responseFindOne.categories.map((category) => ({
+          label: category.name,
+          value: category.id,
+        })),
+        variants: responseFindOne.variants.map((variant) => ({
+          price: variant.price,
+          amount: variant.amount,
+          color: variant.color,
+          size: variant.size,
+        })),
       });
 
       return;
@@ -100,7 +130,7 @@ export function ProductsForm() {
 
     const payload = {
       ...fields,
-      price: Number(fields.price),
+      categories: fields.categories.map((category) => category.value),
     };
 
     if (id) execUpdate(payload);
@@ -197,37 +227,38 @@ export function ProductsForm() {
                 label="Categorias"
                 placeholder="Digite o nome da categoria"
                 promiseOptions={handleSearchCategories}
-                onChange={(value) =>
+                value={fields.categories}
+                onChange={(value) => {
                   setFields({
                     ...fields,
-                    categoryId: value.value,
-                    category: value,
-                  })
-                }
-                value={fields.category}
+                    categories: value,
+                  });
+                }}
               />
 
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
+                  gridTemplateColumns: "1fr 1fr 60px 100px 50px",
+                  alignItems: "flex-end",
                   gap: 16,
                 }}
               >
                 <Input
                   label="Preço"
+                  type="number"
+                  step="0.01"
+                  min="0"
                   placeholder="Digite o preço do produto"
                   name="price"
                   value={fields.price.toString()}
                   onChange={(e) =>
-                    setFields({
-                      ...fields,
-                      price: Number(e.target.value),
-                    })
+                    setFields({ ...fields, price: Number(e.target.value) })
                   }
                 />
                 <Input
-                  label="Quantidade em estoque"
+                  label="Quantidade"
+                  type="number"
                   placeholder="Digite a quantidade em estoque do produto"
                   name="amount"
                   value={fields.amount.toString()}
@@ -235,9 +266,156 @@ export function ProductsForm() {
                     setFields({ ...fields, amount: Number(e.target.value) })
                   }
                 />
+                <Input
+                  type="color"
+                  label="Cor"
+                  name="color"
+                  value={fields.color}
+                  onChange={(e) =>
+                    setFields({
+                      ...fields,
+                      color: e.target.value,
+                    })
+                  }
+                />
+                <Input
+                  label="Tamanho"
+                  placeholder="Digite o tamanho do produto"
+                  name="size"
+                  value={fields.size}
+                  onChange={(e) =>
+                    setFields({
+                      ...fields,
+                      size: e.target.value,
+                    })
+                  }
+                />
+                {isEditing.status ? (
+                  <ArrowUturnRightIcon
+                    style={{
+                      cursor: "pointer",
+                    }}
+                    color="#7E9EF0"
+                    onClick={() => {
+                      if (isEditing.status) {
+                        const newVariants = fields.variants.map(
+                          (variant, index) =>
+                            index === isEditing.index
+                              ? {
+                                  price: fields.price,
+                                  amount: fields.amount,
+                                  color: fields.color,
+                                  size: fields.size,
+                                }
+                              : variant
+                        );
+
+                        setFields({
+                          ...fields,
+                          variants: newVariants,
+                        });
+
+                        setIsEditing({
+                          status: false,
+                          index: 0,
+                        });
+
+                        return;
+                      }
+                      setFields({
+                        ...fields,
+                        variants: [
+                          ...fields.variants,
+                          {
+                            price: fields.price,
+                            amount: fields.amount,
+                            color: fields.color,
+                            size: fields.size,
+                          },
+                        ],
+                      });
+                    }}
+                    width={30}
+                  />
+                ) : (
+                  <PlusCircleIcon
+                    style={{
+                      cursor: "pointer",
+                    }}
+                    color="#7E9EF0"
+                    onClick={() => {
+                      setFields({
+                        ...fields,
+                        variants: [
+                          ...fields.variants,
+                          {
+                            price: fields.price,
+                            amount: fields.amount,
+                            color: fields.color,
+                            size: fields.size,
+                          },
+                        ],
+                      });
+                    }}
+                    width={30}
+                  />
+                )}
               </div>
 
-              <Button> Salvar </Button>
+              {fields.variants.length > 0 && (
+                <div>
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "1fr 1fr 60px 100px 20px 20px",
+                      gap: 16,
+                    }}
+                  >
+                    <p>Preço</p>
+                    <p>Quantidade</p>
+                    <p>Cor</p>
+                    <p>Tamanho</p>
+                    <p></p>
+                    <p></p>
+                  </div>
+
+                  <div>
+                    {fields.variants.map((variant, index) => (
+                      <VariantItem
+                        key={index}
+                        index={index}
+                        variant={variant}
+                        editItem={(index) => {
+                          const item = fields.variants[index];
+                          setFields({
+                            ...fields,
+                            price: item.price,
+                            amount: item.amount,
+                            color: item.color,
+                            size: item.size,
+                          });
+                          setIsEditing({
+                            status: true,
+                            index,
+                          });
+                        }}
+                        removeItem={(index) => {
+                          const newVariants = fields.variants.filter(
+                            (_, i) => i !== index
+                          );
+
+                          setFields({
+                            ...fields,
+                            variants: newVariants,
+                          });
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <Button type="submit"> Salvar </Button>
             </form>
           </div>
         </div>

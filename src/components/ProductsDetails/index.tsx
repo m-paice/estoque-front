@@ -52,7 +52,9 @@ export function ProductsDetails() {
           <Avatar />
           <div>
             <h4>{responseFindOne.name}</h4>
-            <p>{responseFindOne?.category?.name}</p>
+            <p>
+              {responseFindOne?.categories.map((item) => item.name).join(", ")}
+            </p>
           </div>
         </div>
 
@@ -68,22 +70,45 @@ export function ProductsDetails() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "80px 200px",
+              gridTemplateColumns: "repeat(4, 100px)",
+              marginBottom: 10,
+              marginTop: 40,
             }}
           >
-            <div>
-              <p>Preço:</p>
-              <p>
-                {responseFindOne.price.toLocaleString("pt-BR", {
-                  style: "currency",
-                  currency: "BRL",
-                })}
-              </p>
-            </div>
-            <div>
-              <p>Quantidade em estoque:</p>
-              <p>{responseFindOne.amount}</p>
-            </div>
+            <p>Preço</p>
+            <p>Quantidade</p>
+            <p>Cor</p>
+            <p>Tamanho</p>
+          </div>
+          <div>
+            {responseFindOne.variants.map((variant) => (
+              <div
+                key={variant.id}
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(4, 100px)",
+                  marginBottom: 10,
+                }}
+              >
+                <p>
+                  {variant.price.toLocaleString("pt-br", {
+                    style: "currency",
+                    currency: "BRL",
+                  })}
+                </p>
+                <p>{variant.amount}</p>
+                <span
+                  style={{
+                    backgroundColor: variant.color,
+                    width: 30,
+                    height: 30,
+                    display: "inline-block",
+                    borderRadius: 5,
+                  }}
+                ></span>
+                <p>{variant.size}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

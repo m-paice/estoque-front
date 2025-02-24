@@ -15,14 +15,17 @@ export interface Products {
   id: string;
   name: string;
   description: string;
-  category: {
+  categories: {
     id: string;
     name: string;
-  } | null;
-  price: number;
-  amount: number;
-  colors: string[];
-  sizes: string[];
+  }[];
+  variants: {
+    id: string;
+    price: number;
+    amount: number;
+    color: string;
+    size: string;
+  }[];
   OrderProducts: OrderProducts;
 }
 

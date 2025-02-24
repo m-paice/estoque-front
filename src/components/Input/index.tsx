@@ -2,12 +2,16 @@ import { useState } from "react";
 
 interface Props {
   label: string;
-  placeholder: string;
+  placeholder?: string;
   name: string;
   size?: "small" | "medium" | "large";
 
   value?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  type?: string;
+
+  step?: string;
+  min?: string;
 }
 
 export function Input({
@@ -16,7 +20,10 @@ export function Input({
   name,
   size = "medium",
   value,
+  type = "text",
   onChange,
+  step,
+  min,
 }: Props) {
   const [isHovered, setIsHovered] = useState("");
   const [isActived, setIsActived] = useState(false);
@@ -31,10 +38,12 @@ export function Input({
     <div>
       <label htmlFor={name}>{label}</label>
       <input
+        step={step}
+        min={min}
         className="input"
         style={{
           width: "100%",
-          padding: 10,
+          padding: type === "color" ? 0 : 10,
           outline: "none",
           border: "1px solid",
           borderRadius: 5,
@@ -43,7 +52,7 @@ export function Input({
           height: sizes[size],
         }}
         placeholder={placeholder}
-        type="text"
+        type={type}
         id={name}
         onMouseEnter={() => setIsHovered(name)}
         onMouseLeave={() => setIsHovered("")}

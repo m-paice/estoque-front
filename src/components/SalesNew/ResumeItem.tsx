@@ -4,13 +4,24 @@ import { useState } from "react";
 import { useSaleContext } from "../../context/sale";
 
 interface Props {
+  index: number;
   id: string;
   name: string;
   price: number;
   amount: number;
+  color: string;
+  size: string;
 }
 
-export function ResumeItem({ id, name, price, amount }: Props) {
+export function ResumeItem({
+  index,
+  id,
+  name,
+  price,
+  amount,
+  color,
+  size,
+}: Props) {
   const [houver, setHouver] = useState(false);
 
   const { removeProduct, additionAmount, subtractionAmount } = useSaleContext();
@@ -64,7 +75,7 @@ export function ResumeItem({ id, name, price, amount }: Props) {
           }}
         >
           <button
-            onClick={() => additionAmount(id)}
+            onClick={() => additionAmount(index)}
             style={{
               backgroundColor: "#7E9EF0",
               color: "#fff",
@@ -80,7 +91,7 @@ export function ResumeItem({ id, name, price, amount }: Props) {
           </button>
           <p>{amount}</p>
           <button
-            onClick={() => subtractionAmount(id)}
+            onClick={() => subtractionAmount(index)}
             style={{
               backgroundColor: "#7E9EF0",
               color: "#fff",
@@ -95,7 +106,7 @@ export function ResumeItem({ id, name, price, amount }: Props) {
             -
           </button>
           <TrashIcon
-            onClick={() => removeProduct(id)}
+            onClick={() => removeProduct(index)}
             onMouseEnter={() => setHouver(true)}
             onMouseLeave={() => setHouver(false)}
             style={{
@@ -114,30 +125,37 @@ export function ResumeItem({ id, name, price, amount }: Props) {
       <div
         style={{
           display: "flex",
-          justifyContent: "flex-end",
+          justifyContent: "flex-start",
           gap: 10,
         }}
       >
         <p
           style={{
-            display: "flex",
+            display: color ? "flex" : "none",
             alignItems: "center",
             gap: 5,
+            fontSize: 14,
           }}
         >
           Cor{" "}
           <span
             style={{
-              backgroundColor: "#7E9EF0",
+              backgroundColor: color,
               width: 20,
               height: 20,
               display: "inline-block",
               borderRadius: 5,
+              marginBottom: 5,
             }}
           />
         </p>
-        <p>
-          Tamanho: <span>P</span>
+        <p
+          style={{
+            display: size ? "block" : "none",
+            fontSize: 14,
+          }}
+        >
+          Tamanho: <span>{size}</span>
         </p>
       </div>
     </li>

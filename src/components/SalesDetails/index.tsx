@@ -5,6 +5,7 @@ import { useRequestFindOne } from "../../hooks/useRequestFindOne";
 import { Modal } from "../Modal";
 import { Order } from "../../pages/Sales";
 import { Button } from "../Button";
+import { formatPrice } from "../../utils/formatPrice";
 
 const Paragraph = ({ title, prefix }: { title: string; prefix?: string }) => (
   <p
@@ -214,18 +215,13 @@ export function SalesDetails() {
                   {product.OrderProducts.amount}
                 </p>
                 <p style={{ textAlign: "right" }}>
-                  {product.OrderProducts.price.toLocaleString("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
-                  })}
+                  {formatPrice(product.OrderProducts.price || 0)}
                 </p>
                 <p style={{ textAlign: "right" }}>
-                  {(
-                    product.OrderProducts.price * product.OrderProducts.amount
-                  ).toLocaleString("pt-BR", {
-                    style: "currency",
-                    currency: "BRL",
-                  })}
+                  {formatPrice(
+                    product.OrderProducts.price *
+                      product.OrderProducts.amount || 0
+                  )}
                 </p>
               </div>
             ))}

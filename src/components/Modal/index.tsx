@@ -61,8 +61,11 @@ export function Modal({
                   <div
                     style={{
                       minHeight: 200,
+                      maxHeight: "calc(100vh - 200px)",
+                      overflowY: "auto",
                       display: "flex",
                       flexDirection: "column",
+                      paddingRight: 10,
                     }}
                   >
                     {children}
